@@ -158,6 +158,6 @@ guiDisplay(input1, input2) {
 	}
 }
 
-~f1::reload
+~f12::reload
 #IfWinActive, ahk_class Notepad++
 ; ~^s::reload
