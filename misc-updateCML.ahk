@@ -1,18 +1,7 @@
-﻿#Persistent
-#SingleInstance, force
-#NoTrayIcon
+﻿#SingleInstance, force
 
-OnExit, ExitRoutine
-return
-
-ExitRoutine:
-	Gosub updateCML
-	exitapp
-return
-
-updateCML:
-	guiBrowser("http://crystalmathlabs.com/tracker/update.php?player=hersen")
-	guiBrowser("http://crystalmathlabs.com/tracker/update.php?player=hersens")
+guiBrowser("http://crystalmathlabs.com/tracker/update.php?player=hersen")
+guiBrowser("http://crystalmathlabs.com/tracker/update.php?player=hersens")
 return
 
 guiBrowser(url) {
