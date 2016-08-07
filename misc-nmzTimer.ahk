@@ -92,7 +92,7 @@ warnTimers:
 		{
 			lastOverload := Clock_now
 			
-			SoundBeep, 200, 400
+			SoundBeep, 2000, 100
 		}
 	}
 	
@@ -113,7 +113,7 @@ warnTimers:
 		{
 			lastRapidheal := Clock_now
 			
-			SoundBeep, 200, 400
+			SoundBeep, 2000, 100
 			WinActivate, ahk_exe OSBuddy.exe
 		}
 	}
@@ -158,6 +158,6 @@ guiDisplay(input1, input2) {
 	}
 }
 
-~f12::reload
+~f1::reload
 #IfWinActive, ahk_class Notepad++
 ; ~^s::reload
