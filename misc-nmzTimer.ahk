@@ -88,7 +88,7 @@ warnTimers:
 			FormatTime, timeSinceLastOverload_formatted, % timeSinceLastOverload_a, HH:mm:ss
 		}
 		
-		If (Overload_passedTime = 300) ; reset
+		If (Overload_passedTime = 305) ; reset
 		{
 			lastOverload := Clock_now
 			
@@ -96,6 +96,7 @@ warnTimers:
 		}
 	}
 	
+	; /*
 	{ ; rapidheal
 		If (lastRapidheal = "")
 			lastRapidheal := Clock_now
@@ -117,8 +118,31 @@ warnTimers:
 			WinActivate, ahk_exe OSBuddy.exe
 		}
 	}
-	
-	; guiDisplay(timeSinceLastRapidheal_formatted, timeSinceLastOverload_formatted)
+	; */
+	/*
+	{ ; prayerPot
+		If (lastprayerPot = "")
+			lastprayerPot := Clock_now
+		
+		prayerPot_passedTime := Clock_now
+		EnvSub, prayerPot_passedTime, % lastprayerPot, seconds
+		
+		{ ; time passed since last cycle
+			timeSinceLastprayerPot_a := nullTime
+			EnvAdd, timeSinceLastprayerPot_a, prayerPot_passedTime, Seconds
+			FormatTime, timeSinceLastprayerPot_formatted, % timeSinceLastprayerPot_a, HH:mm:ss
+		}
+		
+		If (prayerPot_passedTime = 83) ; reset
+		{
+			lastprayerPot := Clock_now
+			
+			SoundBeep, 2000, 100
+			WinActivate, ahk_exe OSBuddy.exe
+		}
+	}
+	*/
+	; guiDisplay(timeSinceLastprayerPot_formatted, timeSinceLastOverload_formatted)
 return
 
 guiDisplay(input1, input2) {

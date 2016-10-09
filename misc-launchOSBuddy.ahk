@@ -14,7 +14,7 @@ If (osbuddyPath = "")
 
 If WinExist("ahk_exe OSBuddy.exe") ; check if an instance of osbuddy is running
 {
-	If (countWindows("OSBuddy Pro") = 2) ; if so, check if two instances are running
+	If (countWindows("OSBuddy") = 2) ; if so, check if two instances are running
 		exitapp 
 	else
 		run % osbuddyPath ; open an additional instance if not
@@ -31,7 +31,7 @@ WinWaitClose OSBuddy Loader
 
 loop,
 {
-	If (countWindows("OSBuddy Pro") = 2)
+	If (countWindows("OSBuddy") = 2)
 	{
 		sleep 100 ; wait until both windows are fully loaded
 		break
@@ -94,7 +94,7 @@ positionWindows:
 		WinGetTitle wt, ahk_id %id%
 		r .= wt . "`n"
 		
-		If InStr(wt, "OSBuddy Pro")
+		If InStr(wt, "OSBuddy")
 		{
 			count++
 			

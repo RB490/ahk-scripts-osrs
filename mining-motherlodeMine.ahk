@@ -7,8 +7,8 @@ SetKeyDelay -1
 OnMessage(0x201, "WM_LBUTTONDOWN")
 OnMessage(0x203, "WM_LBUTTONDBLCLK")
 
-Gosub loadSettings
 OnExit, exitRoutine
+Gosub loadSettings
 
 inventoryCount := 0
 
@@ -42,6 +42,7 @@ writeIni:
 	
 	ini_save(ini)
 return
+
 exitRoutine:
 	WinGetPos(_guiMotherlode, guiMotherlodeX, guiMotherlodeY)
 	
