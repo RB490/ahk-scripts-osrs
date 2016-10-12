@@ -58,7 +58,7 @@ writeIni() {
 		ini_insertKey(ini, "Window Positions", "guiSettingsY=" . "")
 		
 	ini_insertSection(ini, "Item Prices")
-		Loop, % A_ScriptDir "\res\img\*.*", 0, 1
+		Loop, % A_ScriptDir "\res\img\drops\*.*", 0, 1
 		{
 			SplitPath, A_LoopFileFullPath, OutFileName, OutDir, OutExtension, OutNameNoExt
 			ini_insertKey(ini, "Item Prices", OutNameNoExt "=" . "")
@@ -90,7 +90,7 @@ priceLookup(input) {
 
 updatePrices() {
 	SplashTextOn, 200, 50, % A_ScriptName, Retrieving item prices..
-	Loop, % A_ScriptDir "\res\img\*.*", 0, 1
+	Loop, % A_ScriptDir "\res\img\drops\*.*", 0, 1
 	{
 		SplitPath, A_LoopFileFullPath, OutFileName, OutDir, OutExtension, OutNameNoExt
 		
@@ -195,105 +195,105 @@ guiLog(action = "") {
 		Gui log: Tab, Drop Table
 		
 		Gui log: Add, Text, section, Misc
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Zul-andra teleport.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Dragon bones.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Coconut.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Grapes.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Zulrah's scales.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Battlestaff.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Antidote++ (4).png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Zul-andra teleport.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Dragon bones.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Coconut.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Grapes.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Zulrah's scales.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Battlestaff.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Antidote++ (4).png"
 		Gui log: Add, Text, xs+30 ys section
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Raw shark.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Mahogany plank.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Swamp tar.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Saradomin brew (4).png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Adamantite bar.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Clue scroll (elite).png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Raw shark.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Mahogany plank.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Swamp tar.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Saradomin brew (4).png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Adamantite bar.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Clue scroll (elite).png"
 		Gui log: Add, Text, xs+30 ys section
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Flax.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Snakeskin.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Dragon bolt tips.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Magic logs.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Coal.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Runite ore.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Flax.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Snakeskin.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Dragon bolt tips.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Magic logs.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Coal.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Runite ore.png"
 		
 		Gui log: Add, Text, xs+40 ys section, Seeds
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Magic seed.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Calquat tree seed.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Papaya tree seed.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Palm tree seed.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Toadflax seed.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Magic seed.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Calquat tree seed.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Papaya tree seed.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Palm tree seed.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Toadflax seed.png"
 		Gui log: Add, Text, xs+30 ys section
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Snapdragon seed.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Dwarf weed seed.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Torstol seed.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Spirit seed.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Crystal seed.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Snapdragon seed.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Dwarf weed seed.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Torstol seed.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Spirit seed.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Crystal seed.png"
 		
 		Gui log: Add, Text, xs+40 ys section, Herbs
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Toadflax.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Snapdragon.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Dwarf weed.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Torstol.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Toadflax.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Snapdragon.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Dwarf weed.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Torstol.png"
 		
 		Gui log: Add, Text, xs+40 ys section, Runes
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Law rune.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Death rune.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Chaos rune.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Pure essence.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Law rune.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Death rune.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Chaos rune.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Pure essence.png"
 		
 		Gui log: Add, Text, xs+40 ys section, Rare
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Tanzanite fang.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Magic fang.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Serpentine visage.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Uncut onyx.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Tanzanite fang.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Magic fang.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Serpentine visage.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Uncut onyx.png"
 		Gui log: Add, Text, xs+30 ys section
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Jar of swamp.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Pet snakeling.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Tanzanite mutagen.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Magma mutagen.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Jar of swamp.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Pet snakeling.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Tanzanite mutagen.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Magma mutagen.png"
 		
 		Gui log: Add, Text, xs+40 ys section, Gear
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Dragon med helm.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\zulrah\Dragon halberd.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Dragon med helm.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\zulrah\Dragon halberd.png"
 		
 		Gui log: Tab, Rare Drop Table
 		
 		Gui log: Add, Text, section, Misc
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Coins.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Tooth half of key.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Loop half of key.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Shield left half.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Silver ore.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Runite bar.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Coins.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Tooth half of key.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Loop half of key.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Shield left half.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Silver ore.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Runite bar.png"
 		
 		Gui log: Add, Text, xs+40 ys section, Gear
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Dragon med helm.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Dragon spear.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Rune spear.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Rune 2h sword.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Rune battleaxe.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Rune sq shield.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Dragon med helm.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Dragon spear.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Rune spear.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Rune 2h sword.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Rune battleaxe.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Rune sq shield.png"
 		Gui log: Add, Text, xs+30 ys section
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Rune kiteshield.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Rune arrow.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Steel arrow.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Adamant javelin.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Rune javelin.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Rune kiteshield.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Rune arrow.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Steel arrow.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Adamant javelin.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Rune javelin.png"
 		
 		Gui log: Add, Text, xs+40 ys section, Runes
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Death rune.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Law rune.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Nature rune.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Chaos talisman.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Nature talisman.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Death rune.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Law rune.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Nature rune.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Chaos talisman.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Nature talisman.png"
 		
 		Gui log: Add, Text, xs+40 ys section, Gems
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Dragonstone.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Uncut diamond.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Uncut ruby.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Uncut emerald.png"
-		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\rare drop table\Uncut sapphire.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Dragonstone.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Uncut diamond.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Uncut ruby.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Uncut emerald.png"
+		Gui log: Add, Picture, w%iconWidth% h%iconHeight% AltSubmit 0x1000, % A_ScriptDir "\res\img\drops\rare drop table\Uncut sapphire.png"
 		
 		Gui log: Tab
 		
