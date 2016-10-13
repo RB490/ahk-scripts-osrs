@@ -158,7 +158,7 @@ getItemId(input) {
 }
 
 guiLog(action = "") {
-	static _btnSettings, _btnUndo, _btnTrip, _btnNewTrip, _logDisplay, _dropsDisplay, killsThisTrip, tripTimerRunning, tripStartTime
+	static _btnSettings, _btnUndo, _btnTrip, _btnNewTrip, _btnLogKill, _logDisplay, _dropsDisplay, killsThisTrip, tripTimerRunning, tripStartTime
 	
 	autoOpenStats := ini_getValue(ini, "Settings", "autoOpenStats")
 	guiLogX := ini_getValue(ini, "Window Positions", "guiLogX")
@@ -174,7 +174,7 @@ guiLog(action = "") {
 	
 	If WinExist("Zulrah Logger") and (action = "logKill")
 	{
-		Gosub guiLog_logKill
+		Gosub guiLog_kill
 		return
 	}
 	
@@ -192,14 +192,16 @@ guiLog(action = "") {
 		Gui log: add, button, w150 r2 section hwnd_btnTrip gguiLog_trip
 		Gui log: add, button, x+5 w150 r2 section hwnd_btnNewTrip gguiLog_newTrip, New trip
 		
-		Gui log: add, edit, x5 w305 r17 ReadOnly hwnd_logDisplay
+		Gui log: add, edit, x5 w305 r20 ReadOnly hwnd_logDisplay
 		
-		Gui log: add, button, x5 w50 r1 hwndg__guiLog_btnStats gguiLog_stats, Stats
-		Gui log: add, button, x+5 w50 r1 hwnd_btnSettings gguiLog_settings, Settings
+		Gui log: add, button, x5 w50 r1 hwnd_btnSettings gguiLog_settings, Settings
+		Gui log: add, button, x+5 w50 r1 hwndg__guiLog_btnStats gguiLog_stats, Stats
 		Gui log: add, button, x+5 w95 r1 hwnd_btnUndo gguiLog_undo, Undo
 		Gui log: add, button, x+5 w95 r1 gguiLog_redo hwndg__guiLog_btnRedo Disabled, Redo
 		
-		Gui log: Add, Tab2, xs+155 ys w370 h270 section, Drop Table|Rare Drop Table
+		Gui log: Add, Button, xs+155 ys w370 section r2 hwnd_btnLogKill gguiLog_kill, + Kill (enter)
+		
+		Gui log: Add, Tab2, xs w370 h268 section, Drop Table|Rare Drop Table
 		
 		Gui log: Tab, Drop Table
 		
@@ -306,8 +308,8 @@ guiLog(action = "") {
 		
 		Gui log: Tab
 		
-		Gui log: Add, Edit, x315 y281 w329 ReadOnly hwnd_dropsDisplay
-		Gui log: Add, Button, x+5 yp-1 gguiLog_clearDrops, Clear
+		Gui log: Add, Edit, x315 y320 w316 r1 ReadOnly hwnd_dropsDisplay
+		Gui log: Add, Button, x+5 yp-1 w50 gguiLog_clearDrops, Clear
 		
 		Gui log: Tab
 	}
@@ -348,21 +350,24 @@ guiLog(action = "") {
 	
 	guiLog_undo:
 		log("undo")
+		Gosub guiLog_clearDrops
 	return
 	
 	guiLog_redo:
 		log("redo")
+		Gosub guiLog_clearDrops
 	return
 	
 	guiLog_clearDrops:
 		GuiControl log: , % _dropsDisplay
 	return
 	
-	guiLog_logKill:
+	guiLog_kill:
 		ControlGetText, selectedDrops, , % "ahk_id " _dropsDisplay
 		If !(selectedDrops)
 			return
-		
+			
+		kills := ""
 		loop, parse, g_log, `n
 			If InStr(A_LoopField, ".")
 				kills++
@@ -419,6 +424,7 @@ guiLog(action = "") {
 		{
 			GuiControl log: , % _btnTrip, End Trip
 			GuiControl log: Enable, % _btnNewTrip
+			GuiControl log: Enable, % _btnLogKill
 			
 			If !(tripTimerRunning)
 			{
@@ -431,6 +437,7 @@ guiLog(action = "") {
 		{
 			GuiControl log: , % _btnTrip, Start Trip
 			GuiControl log: Disable, % _btnNewTrip
+			GuiControl log: Disable, % _btnLogKill
 			
 			SetTimer, guiLog_tripTimer, Off
 			tripTimerRunning := 0
@@ -549,7 +556,7 @@ guiStats(refresh = "") {
 	Gui stats: Margin, 5, 5
 
 	; controls
-	Gui stats: Add, ListView, w150 r12 NoSortHdr vguiStats_lv, Description|Value
+	Gui stats: Add, ListView, w160 r12 NoSortHdr vguiStats_lv, Description|Value
 	Gui stats: Add, ListView, x+5 w630 r12 vguiStats_miscLv, Drop|Amount|Value|Drop rate|Kills since last drop|Shortest dry streak|Longest dry streak
 	
 	Gosub guiStats_refresh
@@ -881,18 +888,18 @@ WM_LBUTTONUP() {
 	
 	If !(IsTripOnGoing())
 	{
-		msgbox No trip started!
+		tooltip No trip started!
 		return
 	}
 	
-	ControlGet, existingItems, Line, 1, Edit2, % "Zulrah Logger -" 
+	ControlGetText, existingItems, Edit2, % "Zulrah Logger -" 
 	
 	If !(existingItems)
 		ControlSetText, Edit2, % selectedItem, % "Zulrah Logger -" 
 	else
 	{
 		ControlSetText, Edit2, % existingItems ", " selectedItem, % "Zulrah Logger -" 
-		guiLog("logKill")
+		guiLog("logKill") ; if expanding script to support multiple bosses create setting that will auto submit kill after x amount of drops have been selected
 	}
 }
 
