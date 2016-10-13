@@ -4,10 +4,11 @@ OnMessage(0x202, "WM_LBUTTONUP")
 
 OnExit, exitRoutine
 
-global g_logFile	; log file path
-global g_log		; log file contents
-global ini			; ini variable
-global g__btnStats	; global so guiStats can enable stats button in guiLog
+global g_logFile			; log file path
+global g_log				; log file contents
+global ini					; ini variable
+global g__guiLog_btnRedo	; global so log() can toggle button depending on if there are undone lines to be redone
+global g__guiLog_btnStats	; global so guiStats can enable stats button in guiLog
 
 loadSettings()
 selectLogFile()
@@ -15,6 +16,13 @@ guiLog()
 return
 
 exitRoutine:
+	If WinExist("Zulrah Logger Stats")
+	{
+		WinGetPos, guiStatsX, guiStatsY, , , Zulrah Logger Stats
+		ini_replaceValue(ini, "Window Positions", "guiStatsX", guiStatsX)
+		ini_replaceValue(ini, "Window Positions", "guiStatsY", guiStatsY)
+	}
+	
 	ini_save(ini)
 	exitapp
 return
@@ -150,7 +158,7 @@ getItemId(input) {
 }
 
 guiLog(action = "") {
-	static _btnSettings, _btnTrip, _btnNewTrip, _logDisplay, _dropsDisplay, killsThisTrip, tripTimerRunning, tripStartTime
+	static _btnSettings, _btnUndo, _btnTrip, _btnNewTrip, _logDisplay, _dropsDisplay, killsThisTrip, tripTimerRunning, tripStartTime
 	
 	autoOpenStats := ini_getValue(ini, "Settings", "autoOpenStats")
 	guiLogX := ini_getValue(ini, "Window Positions", "guiLogX")
@@ -172,7 +180,7 @@ guiLog(action = "") {
 	
 	If !WinExist("Zulrah Logger")
 	{
-		; properties
+		; properties^
 		Gui log: New, +LabelguiLog_
 		Gui log: +LastFound -MinimizeBox
 		Gui log: Margin, 5, 5
@@ -186,9 +194,10 @@ guiLog(action = "") {
 		
 		Gui log: add, edit, x5 w305 r17 ReadOnly hwnd_logDisplay
 		
-		Gui log: add, button, x5 w50 r1 hwndg__btnStats gguiLog_stats, Stats
+		Gui log: add, button, x5 w50 r1 hwndg__guiLog_btnStats gguiLog_stats, Stats
 		Gui log: add, button, x+5 w50 r1 hwnd_btnSettings gguiLog_settings, Settings
-		Gui log: add, button, x+5 w195 r1 gguiLog_undo, Undo
+		Gui log: add, button, x+5 w95 r1 hwnd_btnUndo gguiLog_undo, Undo
+		Gui log: add, button, x+5 w95 r1 gguiLog_redo hwndg__guiLog_btnRedo Disabled, Redo
 		
 		Gui log: Add, Tab2, xs+155 ys w370 h270 section, Drop Table|Rare Drop Table
 		
@@ -341,6 +350,10 @@ guiLog(action = "") {
 		log("undo")
 	return
 	
+	guiLog_redo:
+		log("redo")
+	return
+	
 	guiLog_clearDrops:
 		GuiControl log: , % _dropsDisplay
 	return
@@ -360,7 +373,7 @@ guiLog(action = "") {
 	return
 	
 	guiLog_stats:
-		GuiControl log: Disable, % g__btnStats
+		GuiControl log: Disable, % g__guiLog_btnStats
 		guiStats()
 	return
 	
@@ -424,6 +437,11 @@ guiLog(action = "") {
 			
 			Gui log: show, NoActivate, % "Zulrah Logger - " g_logFile
 		}
+		
+		If (g_log)
+			GuiControl log: Enable, % _btnUndo
+		else
+			GuiControl log: Disable, % _btnUndo
 	return
 	
 	guiLog_tripTimer:
@@ -514,12 +532,14 @@ guiSettings() {
 guiStats(refresh = "") {
 	static guiStats_lv, guiStats_miscLv
 	
-	If (refresh)
+	If (refresh) and WinExist("Zulrah Logger Stats")
 	{
 		Gosub guiStats_refresh
 		return
 	}
-	
+	If (refresh) and !WinExist("Zulrah Logger Stats")
+		return
+
 	guiStatsX := ini_getValue(ini, "Window Positions", "guiStatsX")
 	guiStatsY := ini_getValue(ini, "Window Positions", "guiStatsY")
 	
@@ -529,8 +549,8 @@ guiStats(refresh = "") {
 	Gui stats: Margin, 5, 5
 
 	; controls
-	Gui stats: Add, ListView, w220 r10 vguiStats_lv, Description|Value
-	Gui stats: Add, ListView, x+5 w630 r10 vguiStats_miscLv, Drop|Amount|Value|Drop rate|Kills since last drop|Shortest dry streak|Longest dry streak
+	Gui stats: Add, ListView, w150 r12 NoSortHdr vguiStats_lv, Description|Value
+	Gui stats: Add, ListView, x+5 w630 r12 vguiStats_miscLv, Drop|Amount|Value|Drop rate|Kills since last drop|Shortest dry streak|Longest dry streak
 	
 	Gosub guiStats_refresh
 	
@@ -588,13 +608,17 @@ guiStats(refresh = "") {
 			}
 		}
 		
+		currentTripTimeInSeconds := A_Now
+		EnvSub, currentTripTimeInSeconds, tripStart, seconds
+		total_TripTimeInSeconds += currentTripTimeInSeconds
+		
 		total_uniqueDrops := string_removeDuplicates(total_drops)
 		
-		average_killsPerTrip := Round(total_kills / total_trips)
-		average_timePerTripInSeconds := Round(total_TripTimeInSeconds / total_trips)
-		average_dropValue := Round(total_dropValue / total_kills) + (priceLookup("Zulrah's scales") * ini_getValue(ini, "Settings", "averageBaseScales"))
-		average_tripsPerHour := Round(3600 / average_timePerTripInSeconds)
-		average_killsPerHour := Round(average_tripsPerHour * average_killsPerTrip)
+		average_killsPerTrip := total_kills / total_trips
+		average_timePerTripInSeconds := total_TripTimeInSeconds / total_trips
+		average_dropValue := (total_dropValue / total_kills) + (priceLookup("Zulrah's scales") * ini_getValue(ini, "Settings", "averageBaseScales"))
+		average_tripsPerHour := 3600 / average_timePerTripInSeconds
+		average_killsPerHour := average_tripsPerHour * average_killsPerTrip
 		average_dropValuePerHour := average_killsPerHour * average_dropValue
 		
 		total_TripTimeInSecondsFormatted := A_YYYY A_MM A_DD 00 00 00
@@ -615,16 +639,18 @@ guiStats(refresh = "") {
 		GuiControl stats: -Redraw, guiStats_lv
 		LV_Delete()
 		
-		LV_Add(, "Total kills", total_kills)
-		LV_Add(, "Total trips", total_trips)
-		LV_Add(, "Total trip time", total_TripTimeInSecondsFormatted)
-		LV_Add(, "Average kills per trip", average_killsPerTrip)
-		LV_Add(, "Average time per trip", average_timePerTripInSecondsFormatted)
-		LV_Add(, "Average drop value", ThousandsSep(average_dropValue))
-		LV_Add(, "Average kills/hour", average_killsPerHour)
-		LV_Add(, "Average trips/hour", average_tripsPerHour)
-		LV_Add(, "Average profit/hour*", ThousandsSep(average_dropValuePerHour))
-		LV_Add(, "* Excluding supply costs")
+		LV_Add(, "-- Total --")
+		LV_Add(, "Kills", total_kills)
+		LV_Add(, "Trips", total_trips)
+		LV_Add(, "Trip time", total_TripTimeInSecondsFormatted)
+		LV_Add(, "Drop value", ThousandsSep(Round(total_dropValue)))
+		LV_Add(, "-- Average --")
+		LV_Add(, "Kills per trip", Round(average_killsPerTrip, 2))
+		LV_Add(, "Time per trip", average_timePerTripInSecondsFormatted)
+		LV_Add(, "Drop value", ThousandsSep(Round(average_dropValue)))
+		LV_Add(, "Kills/hour", Round(average_killsPerHour, 2))
+		LV_Add(, "Trips/hour", Round(average_tripsPerHour, 2))
+		LV_Add(, "Income/hour", ThousandsSep(Round(average_dropValuePerHour)))
 		
 		LV_ModifyCol(1, "AutoHDR")
 		LV_ModifyCol(2, "AutoHDR")
@@ -736,30 +762,38 @@ guiStats(refresh = "") {
 		ini_replaceValue(ini, "Window Positions", "guiStatsX", guiStatsX)
 		ini_replaceValue(ini, "Window Positions", "guiStatsY", guiStatsY)
 		Gui stats: Destroy
-		GuiControl log: Enable, % g__btnStats
+		GuiControl log: Enable, % g__guiLog_btnStats
 	return
 }
 
 log(action, input = "") {
+	static output_undone
+	
 	If (action = "append") and (input)
 	{
 		FileAppend, % input "`n", % g_logFile
 		g_log .= input "`n"
+		
+		output_undone := ""
 	}
 	
-	If (action = "undo")
+	If (action = "undo") and (g_log)
 	{
-		If !(g_log)
-			return
-			
 		loop, parse, g_log, `n
 			If (A_LoopField)
 				lines++
 				
 		loop, parse, g_log, `n
 		{
-			If !(A_LoopField) or (A_Index = lines)
+			If !(A_LoopField)
 				break
+				
+			If (A_Index = lines)
+			{
+				output_undone := A_LoopField "`n" output_undone
+				break
+			}
+			
 			output .= A_LoopField "`n"
 		}
 		g_log := output
@@ -767,8 +801,38 @@ log(action, input = "") {
 		FileAppend, % g_log, % g_logFile
 	}
 	
+	If (action = "redo") and (output_undone)
+	{
+		; redo undone line
+		loop, parse, output_undone, `n
+		{
+			If !(A_LoopField)
+				break
+				
+			FileAppend, % A_LoopField "`n", % g_logFile
+			g_log .= A_LoopField "`n"
+			break
+		}
+		
+		; remove undone line from var
+		loop, parse, output_undone, `n
+		{
+			If !(A_LoopField)
+				break
+			If !(A_Index = 1)
+				output .= A_LoopField "`n"
+		}
+		
+		output_undone := output
+	}
+	
 	guiLog("refresh")
 	guiStats("refresh")
+	
+	If (output_undone)
+		GuiControl log: Enable, % g__guiLog_btnRedo
+	else
+		GuiControl log: Disable, % g__guiLog_btnRedo
 }
 
 IsTripOnGoing() {
@@ -821,13 +885,13 @@ WM_LBUTTONUP() {
 		return
 	}
 	
-	ControlGet, existingItems, Line, 1, Edit2, Zulrah Logger
+	ControlGet, existingItems, Line, 1, Edit2, % "Zulrah Logger -" 
 	
 	If !(existingItems)
-		ControlSetText, Edit2, % selectedItem, Zulrah Logger
+		ControlSetText, Edit2, % selectedItem, % "Zulrah Logger -" 
 	else
 	{
-		ControlSetText, Edit2, % existingItems ", " selectedItem, Zulrah Logger
+		ControlSetText, Edit2, % existingItems ", " selectedItem, % "Zulrah Logger -" 
 		guiLog("logKill")
 	}
 }
@@ -908,4 +972,5 @@ getRareItemQuantity(input) {
 	return output
 }
 
+#IfWinActive, ahk_exe Notepad++.exe
 ~^s::reload
