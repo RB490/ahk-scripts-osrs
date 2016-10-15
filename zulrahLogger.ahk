@@ -182,7 +182,7 @@ guiLog(action = "") {
 	{
 		; properties^
 		Gui log: New, +LabelguiLog_
-		Gui log: +LastFound -MinimizeBox
+		Gui log: +LastFound
 		Gui log: Margin, 5, 5
 		
 		; controls
@@ -649,7 +649,7 @@ guiStats(refresh = "") {
 		LV_Add(, "-- Total --")
 		LV_Add(, "Kills", total_kills)
 		LV_Add(, "Trips", total_trips)
-		LV_Add(, "Trip time", total_TripTimeInSecondsFormatted)
+		LV_Add(, "Time", total_TripTimeInSecondsFormatted)
 		LV_Add(, "Drop value", ThousandsSep(Round(total_dropValue)))
 		LV_Add(, "-- Average --")
 		LV_Add(, "Kills per trip", Round(average_killsPerTrip, 2))
@@ -899,7 +899,7 @@ WM_LBUTTONUP() {
 	else
 	{
 		ControlSetText, Edit2, % existingItems ", " selectedItem, % "Zulrah Logger -" 
-		guiLog("logKill") ; if expanding script to support multiple bosses create setting that will auto submit kill after x amount of drops have been selected
+		; guiLog("logKill") ; if expanding script to support multiple bosses create setting that will auto submit kill after x amount of drops have been selected
 	}
 }
 
