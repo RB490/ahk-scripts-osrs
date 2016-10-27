@@ -557,7 +557,7 @@ guiSettings() {
 }
 
 guiStats(refresh = "") {
-	static guiStats_lv, guiStats_miscLv
+	static guiStats_lv, guiStats_miscLv, guiStats_miscLvSelectedRow
 	
 	If (refresh) and WinExist("Zulrah Logger Stats")
 	{
@@ -577,7 +577,7 @@ guiStats(refresh = "") {
 
 	; controls
 	Gui stats: Add, ListView, w160 r12 NoSortHdr vguiStats_lv, Description|Value
-	Gui stats: Add, ListView, x+5 w630 r12 vguiStats_miscLv, Drop|Amount|Value|Drop rate|Kills since last drop|Shortest dry streak|Longest dry streak
+	Gui stats: Add, ListView, x+5 w630 r12 vguiStats_miscLv gguiStats_miscLv AltSubmit, Drop|Amount|Value|Drop rate|Kills since last drop|Shortest dry streak|Longest dry streak
 	
 	Gosub guiStats_refresh
 	
@@ -586,6 +586,11 @@ guiStats(refresh = "") {
 		Gui stats: show, % "x" guiStatsX " y" guiStatsY " AutoSize NoActivate", Zulrah Logger Stats
 	else
 		Gui stats: show, AutoSize NoActivate, Zulrah Logger Stats
+	return
+	
+	guiStats_miscLv:
+		If (A_GuiEvent = "Normal") or (A_GuiEvent = "DoubleClick")
+			guiStats_miscLvSelectedRow := A_EventInfo
 	return
 	
 	guiStats_refresh:
@@ -639,11 +644,12 @@ guiStats(refresh = "") {
 		EnvSub, currentTripTimeInSeconds, tripStart, seconds
 		total_TripTimeInSeconds += currentTripTimeInSeconds
 		
+		total_dropValue += total_kills * (priceLookup("Zulrah's scales") * ini_getValue(ini, "Settings", "averageBaseScales"))
 		total_uniqueDrops := string_removeDuplicates(total_drops)
 		
 		average_killsPerTrip := total_kills / total_trips
 		average_timePerTripInSeconds := total_TripTimeInSeconds / total_trips
-		average_dropValue := (total_dropValue / total_kills) + (priceLookup("Zulrah's scales") * ini_getValue(ini, "Settings", "averageBaseScales"))
+		average_dropValue := total_dropValue / total_kills
 		average_tripsPerHour := 3600 / average_timePerTripInSeconds
 		average_killsPerHour := average_tripsPerHour * average_killsPerTrip
 		average_dropValuePerHour := average_killsPerHour * average_dropValue
@@ -713,28 +719,33 @@ guiStats(refresh = "") {
 			dropRate := Round(total_kills / itemAmount)
 			
 			; kills since last drop
+			killsSinceLastDrop := ""
 			loop, parse, g_log, `n
 			{
 				If !(A_LoopField)
 					break
-				If InStr(A_LoopField, item)
-					killsSinceLastDrop := 0
-				else
-					killsSinceLastDrop++
+				
+				If !InStr(A_LoopField, "trip")
+				{
+					If InStr(A_LoopField, item)
+						killsSinceLastDrop := 0
+					else
+						killsSinceLastDrop++
+				}
 			}
-			; killsSinceLastDrop -= 1
 			
 			; dry streaks
 			dryStreak := ""
 			dryStreakOutput := ""
+			itemFound := ""
 			loop, parse, g_log, `n
 			{
 				If !(A_LoopField)
 					break
-					
+				
 				If !InStr(A_LoopField, "Trip")
 				{
-					If InStr(A_LoopField, item)
+					If InStr(A_LoopField, item) and (itemFound)
 					{
 						If !(dryStreak)
 							dryStreak := 0
@@ -743,9 +754,13 @@ guiStats(refresh = "") {
 					}
 					else
 						dryStreak++
+						
+					If InStr(A_LoopField, item)
+						itemFound := 1
 				}
 			}
 			
+			shortestDryStreak := ""
 			Sort, dryStreakOutput, N ; low to high
 			loop, parse, dryStreakOutput, `n
 			{
@@ -756,6 +771,8 @@ guiStats(refresh = "") {
 			dryStreaksOutput .= dryStreak "`n" ; add drystreak since most recent drop after shortest dry streak is retrieved
 			
 			Sort, dryStreakOutput, NR ; high to low
+			
+			longestDryStreak := ""
 			loop, parse, dryStreakOutput, `n
 			{
 				longestDryStreak := A_LoopField
@@ -781,6 +798,9 @@ guiStats(refresh = "") {
 		LV_ModifyCol(7, "Integer")
 		
 		LV_ModifyCol(3, "SortDesc")
+		
+		LV_Modify(guiStats_miscLvSelectedRow, "Vis")
+		
 		GuiControl stats: +Redraw, guiStats_miscLv
 	return
 	
