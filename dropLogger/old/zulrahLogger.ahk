@@ -24,8 +24,7 @@ exitRoutine:
 	}
 	
 	ini_save(ini)
-	exitapp
-return
+exitapp
 
 selectLogFile() {
 	FileSelectFile, g_logFile, 11, , Select Log File, (*.txt)
@@ -106,7 +105,7 @@ updatePrices() {
 		itemId := getItemId(item)
 		If (itemId)
 		{
-			file := A_Temp "\_" A_ScriptName A_ScriptHwnd A_Now ".txt"
+			file := A_Temp "\_" A_ScriptName A_ScriptHwnd A_Now A_TickCount ".txt"
 			UrlDownloadToFile, https://api.rsbuddy.com/grandExchange?a=guidePrice&i=%itemId%, % file
 			FileRead, output, % file
 			FileDelete, % file
