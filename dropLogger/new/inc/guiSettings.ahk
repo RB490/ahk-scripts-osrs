@@ -1,5 +1,5 @@
 guiSettings() {
-	static _autoOpenStatsCheckbox, _averageBaseScalesDisplay, _lastPriceUpdateDisplay
+	static _autoOpenStatsCheckbox, _lastPriceUpdateDisplay
 	
 	autoOpenStats := ini_getValue(ini, "Settings", "autoOpenStats")
 	guiSettingsX := ini_getValue(ini, "Window Positions", "guiSettingsX")
@@ -13,14 +13,9 @@ guiSettings() {
 	; controls
 	Gui settings: Add, Checkbox, checked%autoOpenStats% hwnd_autoOpenStatsCheckbox, Show stats on startup
 	
-	Gui settings: Add, Text, xs w90 section, Average base scales drop
-	Gui settings: Add, Edit, x+5 yp+5 w75 Number hwnd_averageBaseScalesDisplay
-	Gui settings: Add, UpDown, Range0-999
-	GuiControl settings: , % _averageBaseScalesDisplay, % ini_getValue(ini, "Settings", "averageBaseScales") ; updown control sets value to 0
-	
 	Gui settings: Add, Button, xs gguiSettings_updatePrices, Update prices
-	If (ini_getValue(ini, "Settings", "lastPriceUpdate"))
-		FormatTime, lastPriceUpdate_formatted, % ini_getValue(ini, "Settings", "lastPriceUpdate"), dd/MM/yyyy @ HH:mm:ss
+	If (ini_getValue(ini, "General", "lastPriceUpdate"))
+		FormatTime, lastPriceUpdate_formatted, % ini_getValue(ini, "General", "lastPriceUpdate"), dd/MM/yyyy @ HH:mm:ss
 	Gui settings: Add, Text, x+5 yp+5 w200 hwnd_lastPriceUpdateDisplay, % "Last updated: " lastPriceUpdate_formatted
 	
 	Gui settings: Add, Button, x250 y5 gguiSettings_resetLog, Reset log
@@ -42,14 +37,11 @@ guiSettings() {
 		updatePrices()
 		Gui settings: -Disabled
 		
-		FormatTime, lastPriceUpdate_formatted, % ini_getValue(ini, "Settings", "lastPriceUpdate"), dd/MM/yyyy @ HH:mm:ss
+		FormatTime, lastPriceUpdate_formatted, % ini_getValue(ini, "General", "lastPriceUpdate"), dd/MM/yyyy @ HH:mm:ss
 		GuiControl settings: , % _lastPriceUpdateDisplay, % "Last updated: " lastPriceUpdate_formatted
 	return
 	
 	guiSettings_save:
-		ControlGetText, averageBaseScales, , % "ahk_id " _averageBaseScalesDisplay
-		ini_replaceValue(ini, "Settings", "averageBaseScales", averageBaseScales)
-		
 		ControlGet, autoOpenStats, Checked, , , % "ahk_id " _autoOpenStatsCheckbox
 		ini_replaceValue(ini, "Settings", "autoOpenStats", autoOpenStats)
 		

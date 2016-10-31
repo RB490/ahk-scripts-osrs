@@ -86,7 +86,6 @@ guiStats(refresh = "") {
 		EnvSub, currentTripTimeInSeconds, tripStart, seconds
 		total_TripTimeInSeconds += currentTripTimeInSeconds
 		
-		total_dropValue += total_kills * (priceLookup("Drop's scales") * ini_getValue(ini, "Settings", "averageBaseScales"))
 		total_uniqueDrops := string_removeDuplicates(total_drops)
 		
 		average_killsPerTrip := total_kills / total_trips

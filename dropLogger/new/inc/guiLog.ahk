@@ -79,17 +79,17 @@ guiLog(action = "") {
 				If !(count)
 				{
 					count := 1
-					Gui log: Add, Picture, xp+10 yp+30 w%iconWidth% h%iconHeight% AltSubmit Border section, % A_ScriptDir "\res\img\drops\" LoopField ".gif"
+					Gui log: Add, Picture, xp+10 yp+30 w%iconWidth% h%iconHeight% AltSubmit Border section, % A_ScriptDir "\res\img\items\" LoopField ".gif"
 				}
 				else If (count = iconRowHeight)
 				{
 					count := 1
-					Gui log: Add, Picture, % "xs" + marginWidth + iconWidth + 1 " ys w" iconWidth " h"iconHeight " AltSubmit Border section", % A_ScriptDir "\res\img\drops\" LoopField ".gif"
+					Gui log: Add, Picture, % "xs" + marginWidth + iconWidth + 1 " ys w" iconWidth " h"iconHeight " AltSubmit Border section", % A_ScriptDir "\res\img\items\" LoopField ".gif"
 				}
 				else
 				{
 					count++
-					Gui log: Add, Picture, % "yp" + marginHeight + iconHeight + 1 " w" iconWidth " h" iconHeight " AltSubmit Border", % A_ScriptDir "\res\img\drops\" LoopField ".gif"
+					Gui log: Add, Picture, % "yp" + marginHeight + iconHeight + 1 " w" iconWidth " h" iconHeight " AltSubmit Border", % A_ScriptDir "\res\img\items\" LoopField ".gif"
 				}
 			}
 		}
@@ -114,17 +114,17 @@ guiLog(action = "") {
 					ControlGetPos, tab1static1_x, tab1static1_y, , , Static1
 					tab1static1_x -= 3
 					tab1static1_y -= 26
-					Gui log: Add, Picture, x%tab1static1_x% y%tab1static1_y% w%iconWidth% h%iconHeight% AltSubmit Border section, % A_ScriptDir "\res\img\drops\" LoopField ".gif"
+					Gui log: Add, Picture, x%tab1static1_x% y%tab1static1_y% w%iconWidth% h%iconHeight% AltSubmit Border section, % A_ScriptDir "\res\img\items\rare drop table\" LoopField ".gif"
 				}
 				else If (count = iconRowHeight)
 				{
 					count := 1
-					Gui log: Add, Picture, % "xs" + marginWidth + iconWidth + 1 " ys w" iconWidth " h"iconHeight " AltSubmit Border section", % A_ScriptDir "\res\img\drops\" LoopField ".gif"
+					Gui log: Add, Picture, % "xs" + marginWidth + iconWidth + 1 " ys w" iconWidth " h"iconHeight " AltSubmit Border section", % A_ScriptDir "\res\img\items\rare drop table\" LoopField ".gif"
 				}
 				else
 				{
 					count++
-					Gui log: Add, Picture, % "yp" + marginHeight + iconHeight + 1 " w" iconWidth " h" iconHeight " AltSubmit Border", % A_ScriptDir "\res\img\drops\" LoopField ".gif"
+					Gui log: Add, Picture, % "yp" + marginHeight + iconHeight + 1 " w" iconWidth " h" iconHeight " AltSubmit Border", % A_ScriptDir "\res\img\items\rare drop table\" LoopField ".gif"
 				}
 			}
 		}

@@ -8,12 +8,13 @@ guiMain() {
 	
 	; controls
 	gui main: font, s12
-	gui main: add, edit, w250 gguiMain_search vguiMain_searchString
+	gui main: add, edit, w250 gguiMain_search vguiMain_searchString, % guiMain_searchString
 	gui main: add, ListBox, w250 r10 gguiMain_Lb vg_mob
 	gui main: font
 	gui main: add, button, w250 gguiMain_updateMobList, Update
 	
 	Gosub guiMain_refresh
+	Gosub guiMain_search
 	
 	; show
 	gui main: show, , Choose Mob

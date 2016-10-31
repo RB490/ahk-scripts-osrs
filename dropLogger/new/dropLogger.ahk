@@ -11,11 +11,7 @@ global g__guiLog_btnRedo	; global so log() can toggle button depending on if the
 global g__guiLog_btnStats	; global so guiStats can enable stats button in guiLog
 
 loadSettings()
-g_mob := "Abyssal Sire"
-; getItemQuantity("Rune platebody")
-guiLog()
-; guiMain()
-msgbox script end
+guiMain()
 return
 #Include, %A_ScriptDir%\inc
 #Include, guiMain.ahk
@@ -38,8 +34,6 @@ loadSettings() {
 	SplitPath, A_ScriptName, , , , ScriptName
 	iniFile := A_ScriptDir "\" ScriptName ".ini"
 	
-	; FileDelete, % iniFile
-	
 	ini_load(ini, iniFile)
 	If (ErrorLevel = 1)
 	{
@@ -51,10 +45,9 @@ loadSettings() {
 writeIni() {
 	ini_insertSection(ini, "General")
 		ini_insertKey(ini, "General", "mobList=")
+		ini_insertKey(ini, "General", "lastPriceUpdate=" . "")
 		
 	ini_insertSection(ini, "Settings")
-		ini_insertKey(ini, "Settings", "averageBaseScales=" . "175")
-		ini_insertKey(ini, "Settings", "lastPriceUpdate=" . "")
 		ini_insertKey(ini, "Settings", "autoOpenStats=" . "0")
 	
 	ini_insertSection(ini, "Window Positions")
@@ -203,7 +196,7 @@ updateMobDropTable(input) {
 }
 
 getItemImg(input) {
-	If FileExist(A_ScriptDir "\res\img\drops\" input ".gif")
+	If FileExist(A_ScriptDir "\res\img\items\" input ".gif")
 		return
 	
 	file := A_Temp "\_" A_ScriptName A_ScriptHwnd A_Now A_TickCount ".gif"
@@ -212,7 +205,7 @@ getItemImg(input) {
 	If (itemId)
 	{
 		UrlDownloadToFile, http://services.runescape.com/m=itemdb_oldschool/1477667736648_obj_big.gif?id=%itemId%, % file
-		FileMove, % file, % A_ScriptDir "\res\img\drops\" input ".gif"
+		FileMove, % file, % A_ScriptDir "\res\img\items\" input ".gif"
 	}
 	else
 	{
@@ -225,7 +218,7 @@ getItemImg(input) {
 				UrlDownloadToFile, % StringBetween(SubStr(A_LoopField, InStr(A_LoopField, "Content=")), """", """"), % file
 				break
 			}
-		FileMove, % file, % A_ScriptDir "\res\img\drops\" input ".gif"
+		FileMove, % file, % A_ScriptDir "\res\img\items\" input ".gif"
 	}
 }
 
@@ -454,12 +447,15 @@ WM_MOUSEMOVE() {
 	
 	If !(input = oldInput) ; new item under mouse
 	{
-		ToolTip, % input
+		ToolTip, % getItemQuantity(input)
 		oldInput := input
 	}
 }
 
 WM_LBUTTONUP() {
+	gui log: +OwnDialogs
+	CoordMode, Mouse, Screen
+
 	selectedItem := getItemUnderMouse()
 	If !(selectedItem)
 		return
@@ -472,62 +468,60 @@ WM_LBUTTONUP() {
 	
 	ControlGetText, existingItems, Edit2, % "Drop Logger -" 
 	
+	selectedItem := getItemQuantity(selectedItem)
+	If InStr(selectedItem, "custom x ")
+	{
+		MouseGetPos, xx, yy
+		xx -= 50
+		yy -= 50
+		InputBox, OutputVar, % A_ScriptName, , , 100, 103, % xx, % yy
+		
+		If !(OutputVar)
+			return
+		If OutputVar is not integer
+			return
+		StringReplace, selectedItem, selectedItem, custom, % OutputVar
+	}
+	
 	If !(existingItems)
-		ControlSetText, Edit2, % getItemQuantity(selectedItem), % "Drop Logger -" 
+		ControlSetText, Edit2, % selectedItem, % "Drop Logger -" 
 	else
-		ControlSetText, Edit2, % existingItems ", " getItemQuantity(selectedItem), % "Drop Logger -" 
+		ControlSetText, Edit2, % existingItems ", " selectedItem, % "Drop Logger -" 
 }
 
 getItemQuantity(input) {
-	gui log: +OwnDialogs
-	CoordMode, Mouse, Screen
-	
 	GuiControlGet, selectedTab, , SysTabControl321, % "Drop Logger -" 
 	
 	If (selectedTab = "Drop Table")
 	{
 		loop, parse, % ini_getValue(ini, "Drop Tables", g_mob), |
 		{
-			LoopField := A_LoopField
-			
-			If InStr(LoopField, "custom x ")
+			output := A_LoopField
+			If InStr(A_LoopField, " x ")
+				output := SubStr(A_LoopField, InStr(A_LoopField, " x ") + 3)
+			If (output = input)
 			{
-				MouseGetPos, xx, yy
-				xx -= 50
-				yy -= 50
-				InputBox, OutputVar, % A_ScriptName, , , 100, 103, % xx, % yy
-				; InputBox, OutputVar [, Title, Prompt, HIDE, Width, Height, X, Y, Font, Timeout, Default]
-				
-				If !(OutputVar)
-					return
-				If OutputVar is not integer
-					return
-				StringReplace, LoopField, LoopField, custom, % OutputVar
-				return LoopField
+				output := A_LoopField
+				break
 			}
-			else
-			{
-				If InStr(LoopField, " x ")
-					LoopField := SubStr(LoopField, InStr(LoopField, " x ") + 3)
-					
-				If (LoopField = input)
-					return A_LoopField
-			}
-			
 		}
 	}
 	If (selectedTab = "Rare Drop Table")
 	{
 		loop, parse, % ini_getValue(ini, "Drop Tables", "rare drop table"), |
 		{
-			LoopField := A_LoopField
-			If InStr(LoopField, " x ")
-				LoopField := SubStr(LoopField, InStr(LoopField, " x ") + 3)
-				
-			If (LoopField = input)
-				return A_LoopField
+			output := A_LoopField
+			If InStr(A_LoopField, " x ")
+				output := SubStr(A_LoopField, InStr(A_LoopField, " x ") + 3)
+			If (output = input)
+			{
+				output := A_LoopField
+				break
+			}
 		}
 	}
+	
+	return output
 }
 
 getItemUnderMouse() {
