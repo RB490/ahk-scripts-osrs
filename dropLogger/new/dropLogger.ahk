@@ -9,6 +9,7 @@ global g_log				; log file contents
 global g_mob				; selected boss
 global g__guiLog_btnRedo	; global so log() can toggle button depending on if there are undone lines to be redone
 global g__guiLog_btnStats	; global so guiStats can enable stats button in guiLog
+global itemsObj				; items object. contains item ids & prices from: https://rsbuddy.com/exchange/summary.json
 
 loadSettings()
 guiMain()
@@ -30,9 +31,17 @@ exitRoutine:
 	ini_save(ini)
 exitapp
 
-loadSettings() {
+loadSettings(loadItemsObj = "") {
+	If (loadItemsObj) {
+		FileRead, itemsJson, % A_ScriptDir "\res\itemIds.json"
+		itemsObj := Jxon_Load( itemsJson )
+		return
+	}
+	
 	SplitPath, A_ScriptName, , , , ScriptName
 	iniFile := A_ScriptDir "\" ScriptName ".ini"
+	
+	FileDelete, % iniFile
 	
 	ini_load(ini, iniFile)
 	If (ErrorLevel = 1)
@@ -44,8 +53,9 @@ loadSettings() {
 
 writeIni() {
 	ini_insertSection(ini, "General")
-		ini_insertKey(ini, "General", "mobList=")
-		ini_insertKey(ini, "General", "lastPriceUpdate=" . "")
+		ini_insertKey(ini, "General", "mobList=Aberrant spectre|Abhorrent spectre|Abyssal Sire|Abyssal demon|Al-Kharid warrior|Ankou|Aviansie|Baby blue dragon|Baby green dragon|Balfrug Kreeyath|Banshee|Barbarian|Basilisk|Bat|Black Knight|Black bear|Black demon|Black dragon|Black unicorn|Bloodveld|Blue dragon|Bree|Brine rat|Bronze dragon|Callisto|Catablepon|Cave abomination|Cave bug|Cave crawler|Cave horror|Cave kraken|Cave slime|Cerberus|Chaos Elemental|Chaos Fanatic|Chaos druid|Chaos dwarf|Chasm Crawler|Choke devil|Chronozon|Cockatrice|Commander Zilyana|Corporeal Beast|Crawling Hand|Crazy archaeologist|Crocodile|Crushing Hand|Cyclops|Dagannoth (Lighthouse)|Dagannoth Kings|Dagannoth Prime|Dagannoth Rex|Dagannoth Supreme|Dark beast|Demonic gorilla|Desert Lizard|Deviant spectre|Dust devil|Earth warrior|Elder Chaos druid|Fever spider|Fire giant|Fiyr Shade|Flaming pyrelord|Flesh Crawler|Flight Kilisa|Flockleader Geerin|Gangster|Gargoyle|General Graardor|Ghoul|Giant Mole|Giant bat|Giant rockslug|Glod|Gnome guard|Gorak|Greater Nechryael|Greater abyssal demon|Greater demon|Green dragon|Growler|Guard dog|Harpie Bug Swarm|Hellhound|Hill giant|Hobgoblin|Ice troll grunt|Icefiend|Infernal Mage|Insatiable Bloodveld|Insatiable mutated Bloodveld|Jogre|K'ril Tsutsaroth|Kalphite Queen|King Black Dragon|King Scorpion|King kurask|Knight of Saradomin|Kraken|Kree'arra|Kurask|Lava dragon|Lesser demon|Lizard|Lizardman|Lizardman brute|Magic axe|Malevolent Mage|Mammoth|Marble gargoyle|Minotaur|Mogre|Molanisk|Monkey Guard|Moss giant|Mountain troll|Mutated Bloodveld|Nechryael|Nechryarch|Night beast|Nuclear smoke devil|Ogre|Otherworldly being|Phrin Shade|Pyrefiend|Red dragon|Repugnant spectre|Riyl Shade|Rockslug|Salarin the Twisted|Scorpia|Scorpion|Screaming banshee|Sea Snake Young|Seagull|Sergeant Grimspike|Sergeant Steelwill|Sergeant Strongstack|Skeletal Wyvern|Smoke devil|Spiritual mage|Spiritual ranger|Spiritual warrior|Starlight|Superior slayer monster|Suqah|Terror dog|Thermonuclear smoke devil|Tree spirit|Tstanon Karlak|Turoth|Twisted Banshee|Unicow|Vampire|Venenatis|Vet'ion|Vitreous Jelly|Wall beast|Warped Jelly|Waterfiend|Werewolf|Wingman Skree|Yak|Zakl'n Gritch|Zamorak wizard|Zombie (random event)|Zulrah|Zygomite")
+		ini_insertKey(ini, "General", "lastItemDatabaseUpdate=" . "")
+		ini_insertKey(ini, "General", "lastMobListUpdate=" . "20161031123901")
 		
 	ini_insertSection(ini, "Settings")
 		ini_insertKey(ini, "Settings", "autoOpenStats=" . "0")
@@ -60,51 +70,15 @@ writeIni() {
 	
 	ini_insertSection(ini, "Drop Tables")
 		ini_insertKey(ini, "Drop Tables", "rare drop table=45 x Law rune|45 x Death rune|67 x Nature rune|150 x Steel arrow|42 x Rune arrow|Uncut sapphire|Uncut emerald|Uncut ruby|Uncut diamond|Dragonstone|Runite bar|100 x Silver ore|3,000 x Coins|Chaos talisman|Nature talisman|Loop half of key|Tooth half of key|20 x Adamant javelin|5 x Rune javelin|Rune 2h sword|Rune battleaxe|Rune sq shield|Rune kiteshield|Dragon med helm|Rune spear|Shield left half|Dragon spear")
-
-	ini_insertSection(ini, "Item Prices")
 	
-	updateMobList()
+	updateItemDatabase()
 	ini_save(ini)
-}
-
-updatePrices(updateMissingPrices = "") {
-	SplashTextOn, 200, 50, % A_ScriptName, Retrieving item prices..
-	Loop, parse, % ini_getAllKeyNames(ini, "Item Prices"), `,
-	{
-		item := A_LoopField
-		
-		If (updateMissingPrices) and (ini_getValue(ini, "Item Prices", item)) {
-			; do nothing
-		}
-		else
-		{
-			itemId := getItemId(item)
-			
-			If (itemId)
-			{
-				file := A_Temp "\_" A_ScriptName A_ScriptHwnd A_Now A_TickCount ".txt"
-				UrlDownloadToFile, https://api.rsbuddy.com/grandExchange?a=guidePrice&i=%itemId%, % file
-				FileRead, output, % file
-				FileDelete, % file
-
-				price := SubStr(output, 12)
-				price := SubStr(price, 1, InStr(price, ",") - 1)
-				
-				ini_replaceValue(ini, "Item Prices", item, price)
-			}
-			If (item = "Coins")
-				ini_replaceValue(ini, "Item Prices", item, 1)
-		}
-	}
-	If !(updateMissingPrices)
-		ini_replaceValue(ini, "General", "lastPriceUpdate", A_Now)
-	SplashTextOff
 }
 
 updateMobList() {
 	SplashTextOn, 200, 50, % A_ScriptName, Retrieving mobs..
 	
-	loop, parse, % "http://2007.runescape.wikia.com/wiki/Category:Bosses,http://2007.runescape.wikia.com/wiki/Category:Slayer_Monsters", `,
+	loop, parse, % "http://2007.runescape.wikia.com/wiki/Category:Monsters,http://2007.runescape.wikia.com/wiki/Category:Slayer_Monsters,http://2007.runescape.wikia.com/wiki/Category:Bosses,http://2007.runescape.wikia.com/wiki/Category:Demons", `,
 	{
 		input := urlToVar(A_LoopField)
 		
@@ -113,7 +87,13 @@ updateMobList() {
 		
 		loop, parse, output, `n
 			If InStr(A_LoopField, "title") and !InStr(A_LoopField, "/Strategies") and !InStr(A_LoopField, "Boss")
-				MobList .= StringBetween(SubStr(A_LoopField, InStr(A_LoopField, "title=")), """", """") "`n"
+			{
+				mob := StringBetween(SubStr(A_LoopField, InStr(A_LoopField, "title=")), """", """")
+				StringReplace, mobNoSpaces, mob, % A_Space, _
+				output := urlToVar("http://2007.runescape.wikia.com/wiki/" mobNoSpaces)
+				If InStr(output, "Drops</span>")
+					MobList .= mob "`n"
+			}
 	}
 	Sort, MobList, CU ; c=case insensitive alphabetical u=remove duplicates
 	
@@ -123,6 +103,8 @@ updateMobList() {
 	output := RTrim(output, "|")
 	
 	ini_replaceValue(ini, "general", "mobList", output)
+	
+	ini_replaceValue(ini, "General", "lastMobListUpdate", A_Now)
 	
 	SplashTextOff
 }
@@ -159,9 +141,6 @@ updateMobDropTable(input) {
 			
 			getItemImg(drop)
 			
-			If !InStr(ini_getAllKeyNames(ini, "Item Prices"), drop)
-				ini_insertKey(ini, "Item Prices", drop "=")
-			
 			itemFound := 1
 		}
 		
@@ -184,7 +163,33 @@ updateMobDropTable(input) {
 			}
 		}
 	}
+	If (input = "Abyssal Sire")
+		loop, parse, % "Abyssal head|Abyssal orphan|Abyssal dagger|Abyssal whip|Bludgeon claw|Bludgeon spine|Bludgeon axon|Jar of miasma", |
+		{
+			output_dropTable .= A_LoopField "`n"
+			getItemImg(A_LoopField)
+		}
 	
+	; remove output_dropTable duplicates
+	loop, parse, output_dropTable, `n
+	{
+		quantity := 1
+		item := A_LoopField
+		If InStr(A_LoopField, " x ")
+		{
+			quantity := SubStr(A_LoopField, 1, InStr(A_LoopField, " x ") - 1)
+			item := SubStr(A_LoopField, InStr(A_LoopField, " x ") + 3)
+		}
+		existsInOutput := ""
+		loop, parse, output_new, `n
+			If (SubStr(A_LoopField, InStr(A_LoopField, " x ") + 3) = item)
+				existsInOutput := 1
+		If !(existsInOutput)
+			output_new .= A_LoopField "`n"
+	}
+	output_dropTable := output_new
+
+	; format output_dropTable
 	output := ""
 	loop, parse, output_dropTable, `n
 		output .= A_LoopField "|"
@@ -223,42 +228,44 @@ getItemImg(input) {
 }
 
 getItemId(input) {
-	static itemIdList
-	If !(itemIdList)
-	{
-		FileRead, itemIdList, % A_ScriptDir "\res\itemIds.json" ; https://rsbuddy.com/exchange/summary.json
-		If (ErrorLevel)	
-		{
-			msgbox Error reading item id list file! Closing..
-			exitapp
-		}
+	for itemId in itemsObj {
+		If (itemsObj[itemId].name = input)
+			return itemsObj[itemId].id
 	}
-	
-	; make changes to input to match json file
-	StringReplace, input, input, ', \u0027, All ; replace backticks with \u0027
-	If InStr(input, "(")
+}
+
+priceLookup(input) {
+	quantity := 1
+	item := input
+	If InStr(input, " x ")
 	{
-		loop, parse, input
-			If A_LoopField is number
-				containsNumber := 1
-		
-		If (containsNumber)
-			StringReplace, input, input, % " (", (, All ; remove space in for example Saradomin brew (4)
+		quantity := SubStr(input, 1, InStr(input, " x ") - 1)
+		item := SubStr(input, InStr(input, " x ") + 3)
 	}
-	
-	loop, parse, itemIdList, `n
-	{
-		If (match) and InStr(A_LoopField, "id")
+	for itemId in itemsObj {
+		If (itemsObj[itemId].name = item)
 		{
-			StringReplace, output, A_LoopField, "id": ,
-			output := string_cleanUp(output)
-			output := RTrim(output, ",")
+			price := itemsObj[itemId].sell_average
 			break
 		}
-		else If InStr(A_LoopField, """" input """")
-			match := "found"
 	}
+	If (item = "Coins")
+		price := 1
+
+	output := price * quantity
+	
 	return output
+}
+
+updateItemDatabase() {
+	SplashTextOn, 200, 50, % A_ScriptName, Updating item database..
+
+	FileDelete, % A_ScriptDir "\res\itemIds.json" 
+	FileAppend, % urlToVar("https://rsbuddy.com/exchange/summary.json"), % A_ScriptDir "\res\itemIds.json" 
+	
+	ini_replaceValue(ini, "General", "lastItemDatabaseUpdate", A_Now)
+	
+	SplashTextOff
 }
 
 urlToVar(url) {
@@ -357,65 +364,6 @@ log(action, input = "") {
 		GuiControl log: Enable, % g__guiLog_btnRedo
 	else
 		GuiControl log: Disable, % g__guiLog_btnRedo
-}
-
-priceLookup(input) {
-	If !(input)
-		return
-	quantity := 1
-	item := input
-	If InStr(input, " x ")
-	{
-		quantity := SubStr(input, 1, InStr(input, " x ") - 1)
-		item := SubStr(input, InStr(input, " x ") + 3)
-	}
-
-	price := ini_getValue(ini, "Item Prices", item)
-	If (item = "Coins")
-		price := 1
-
-	output := price * quantity
-	
-	return output
-}
-
-priceLookupNew(input) {
-	static itemIdList
-	If !(itemIdList)
-	{
-		FileRead, itemIdList, % A_ScriptDir "\res\itemIds_New2.json" ; https://rsbuddy.com/exchange/summary.json
-		If (ErrorLevel)	
-		{
-			msgbox Error reading item id list file! Closing..
-			exitapp
-		}
-	}
-	
-	; make changes to input to match json file
-	StringReplace, input, input, ', \u0027, All ; replace backticks with \u0027
-	If InStr(input, "(")
-	{
-		loop, parse, input
-			If A_LoopField is number
-				containsNumber := 1
-		
-		If (containsNumber)
-			StringReplace, input, input, % " (", (, All ; remove space in for example Saradomin brew (4)
-	}
-	
-	loop, parse, itemIdList, `n
-	{
-		If (match) and InStr(A_LoopField, "sell_average")
-		{
-			StringReplace, output, A_LoopField, "sell_average": ,
-			output := string_cleanUp(output)
-			output := RTrim(output, ",")
-			break
-		}
-		else If InStr(A_LoopField, """" input """")
-			match := "found"
-	}
-	return output
 }
 
 selectLogFile() {

@@ -11,13 +11,15 @@ guiMain() {
 	gui main: add, edit, w250 gguiMain_search vguiMain_searchString, % guiMain_searchString
 	gui main: add, ListBox, w250 r10 gguiMain_Lb vg_mob
 	gui main: font
-	gui main: add, button, w250 gguiMain_updateMobList, Update
+	gui main: add, button, w250 gguiMain_settings, Settings
 	
 	Gosub guiMain_refresh
 	Gosub guiMain_search
 	
 	; show
 	gui main: show, , Choose Mob
+	
+	loadSettings("loadItemsObj")
 	
 	; close
 	WinWaitClose, Choose Mob
@@ -54,9 +56,9 @@ guiMain() {
 		GuiControl main: +Redraw, g_mob
 	return
 	
-	guiMain_updateMobList:
+	guiMain_settings:
 		gui main: +Disabled
-		updateMobList()
+		guiSettings()
 		Gosub guiMain_refresh
 		gui main: -Disabled
 	return
@@ -74,7 +76,6 @@ guiMain() {
 		{
 			ini_insertKey(ini, "Drop Tables", g_mob "=")
 			updateMobDropTable(g_mob)
-			updatePrices("updateNewlyAdded")
 		}
 		
 		guiLog()

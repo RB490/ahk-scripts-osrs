@@ -1,5 +1,5 @@
 guiSettings() {
-	static _autoOpenStatsCheckbox, _lastPriceUpdateDisplay
+	static _autoOpenStatsCheckbox, _lastItemDatabaseUpdateDisplay, _lastMobListUpdateDisplay
 	
 	autoOpenStats := ini_getValue(ini, "Settings", "autoOpenStats")
 	guiSettingsX := ini_getValue(ini, "Window Positions", "guiSettingsX")
@@ -11,16 +11,21 @@ guiSettings() {
 	Gui settings: +LabelguiSettings_
 	
 	; controls
-	Gui settings: Add, Checkbox, checked%autoOpenStats% hwnd_autoOpenStatsCheckbox, Show stats on startup
+	Gui settings: Add, Button, w150 gguiSettings_updateItemDatabase, Update item database
+	If (ini_getValue(ini, "General", "lastItemDatabaseUpdate"))
+		FormatTime, lastItemDatabaseUpdate_formatted, % ini_getValue(ini, "General", "lastItemDatabaseUpdate"), dd/MM/yyyy @ HH:mm:ss
+	Gui settings: Add, Text, x+5 yp+5 w190 hwnd_lastItemDatabaseUpdateDisplay, % "Last updated: " lastItemDatabaseUpdate_formatted
 	
-	Gui settings: Add, Button, xs gguiSettings_updatePrices, Update prices
-	If (ini_getValue(ini, "General", "lastPriceUpdate"))
-		FormatTime, lastPriceUpdate_formatted, % ini_getValue(ini, "General", "lastPriceUpdate"), dd/MM/yyyy @ HH:mm:ss
-	Gui settings: Add, Text, x+5 yp+5 w200 hwnd_lastPriceUpdateDisplay, % "Last updated: " lastPriceUpdate_formatted
+	Gui settings: Add, Button, xs w150 gguiSettings_updatemobList, Update mob list
+	If (ini_getValue(ini, "General", "lastMobListUpdate"))
+		FormatTime, lastmobListUpdate_formatted, % ini_getValue(ini, "General", "lastMobListUpdate"), dd/MM/yyyy @ HH:mm:ss
+	Gui settings: Add, Text, x+5 yp+5 w190 hwnd_lastmobListUpdateDisplay, % "Last updated: " lastmobListUpdate_formatted
 	
-	Gui settings: Add, Button, x250 y5 gguiSettings_resetLog, Reset log
+	Gui settings: Add, Button, xs w150 gguiSettings_resetLog, Reset log
 	
-	Gui settings: Add, Button, xs w300 gguiSettings_save, Save
+	Gui settings: Add, Checkbox, x+5 yp+5 checked%autoOpenStats% hwnd_autoOpenStatsCheckbox, Automatically open stats gui
+	
+	Gui settings: Add, Button, xs w350 gguiSettings_save, Save
 	
 	; show
 	If (guiSettingsX) and (guiSettingsY)
@@ -32,13 +37,22 @@ guiSettings() {
 	WinWaitClose, Drop Logger Settings
 	return
 	
-	guiSettings_updatePrices:
+	guiSettings_updateItemDatabase:
 		Gui settings: +Disabled
-		updatePrices()
+		updateItemDatabase()
 		Gui settings: -Disabled
 		
-		FormatTime, lastPriceUpdate_formatted, % ini_getValue(ini, "General", "lastPriceUpdate"), dd/MM/yyyy @ HH:mm:ss
-		GuiControl settings: , % _lastPriceUpdateDisplay, % "Last updated: " lastPriceUpdate_formatted
+		FormatTime, lastItemDatabaseUpdate_formatted, % ini_getValue(ini, "General", "lastItemDatabaseUpdate"), dd/MM/yyyy @ HH:mm:ss
+		GuiControl settings: , % _lastItemDatabaseUpdateDisplay, % "Last updated: " lastItemDatabaseUpdate_formatted
+	return
+	
+	guiSettings_updateMobList:
+		Gui settings: +Disabled
+		updateMobList()
+		Gui settings: -Disabled
+		
+		FormatTime, lastMobListUpdate_formatted, % ini_getValue(ini, "General", "lastMobListUpdate"), dd/MM/yyyy @ HH:mm:ss
+		GuiControl settings: , % _lastMobListUpdateDisplay, % "Last updated: " lastMobListUpdate_formatted
 	return
 	
 	guiSettings_save:
