@@ -73,10 +73,7 @@ guiMain() {
 		gui main: hide
 		
 		If !(ini_getValue(ini, "Drop Tables", g_mob))
-		{
-			ini_insertKey(ini, "Drop Tables", g_mob "=")
 			updateMobDropTable(g_mob)
-		}
 		
 		guiLog()
 		

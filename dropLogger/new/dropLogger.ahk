@@ -37,11 +37,11 @@ loadSettings(loadItemsObj = "") {
 		itemsObj := Jxon_Load( itemsJson )
 		return
 	}
-	
+
 	SplitPath, A_ScriptName, , , , ScriptName
 	iniFile := A_ScriptDir "\" ScriptName ".ini"
 	
-	FileDelete, % iniFile
+	; FileDelete, % iniFile
 	
 	ini_load(ini, iniFile)
 	If (ErrorLevel = 1)
@@ -53,9 +53,10 @@ loadSettings(loadItemsObj = "") {
 
 writeIni() {
 	ini_insertSection(ini, "General")
-		ini_insertKey(ini, "General", "mobList=Aberrant spectre|Abhorrent spectre|Abyssal Sire|Abyssal demon|Al-Kharid warrior|Ankou|Aviansie|Baby blue dragon|Baby green dragon|Balfrug Kreeyath|Banshee|Barbarian|Basilisk|Bat|Black Knight|Black bear|Black demon|Black dragon|Black unicorn|Bloodveld|Blue dragon|Bree|Brine rat|Bronze dragon|Callisto|Catablepon|Cave abomination|Cave bug|Cave crawler|Cave horror|Cave kraken|Cave slime|Cerberus|Chaos Elemental|Chaos Fanatic|Chaos druid|Chaos dwarf|Chasm Crawler|Choke devil|Chronozon|Cockatrice|Commander Zilyana|Corporeal Beast|Crawling Hand|Crazy archaeologist|Crocodile|Crushing Hand|Cyclops|Dagannoth (Lighthouse)|Dagannoth Kings|Dagannoth Prime|Dagannoth Rex|Dagannoth Supreme|Dark beast|Demonic gorilla|Desert Lizard|Deviant spectre|Dust devil|Earth warrior|Elder Chaos druid|Fever spider|Fire giant|Fiyr Shade|Flaming pyrelord|Flesh Crawler|Flight Kilisa|Flockleader Geerin|Gangster|Gargoyle|General Graardor|Ghoul|Giant Mole|Giant bat|Giant rockslug|Glod|Gnome guard|Gorak|Greater Nechryael|Greater abyssal demon|Greater demon|Green dragon|Growler|Guard dog|Harpie Bug Swarm|Hellhound|Hill giant|Hobgoblin|Ice troll grunt|Icefiend|Infernal Mage|Insatiable Bloodveld|Insatiable mutated Bloodveld|Jogre|K'ril Tsutsaroth|Kalphite Queen|King Black Dragon|King Scorpion|King kurask|Knight of Saradomin|Kraken|Kree'arra|Kurask|Lava dragon|Lesser demon|Lizard|Lizardman|Lizardman brute|Magic axe|Malevolent Mage|Mammoth|Marble gargoyle|Minotaur|Mogre|Molanisk|Monkey Guard|Moss giant|Mountain troll|Mutated Bloodveld|Nechryael|Nechryarch|Night beast|Nuclear smoke devil|Ogre|Otherworldly being|Phrin Shade|Pyrefiend|Red dragon|Repugnant spectre|Riyl Shade|Rockslug|Salarin the Twisted|Scorpia|Scorpion|Screaming banshee|Sea Snake Young|Seagull|Sergeant Grimspike|Sergeant Steelwill|Sergeant Strongstack|Skeletal Wyvern|Smoke devil|Spiritual mage|Spiritual ranger|Spiritual warrior|Starlight|Superior slayer monster|Suqah|Terror dog|Thermonuclear smoke devil|Tree spirit|Tstanon Karlak|Turoth|Twisted Banshee|Unicow|Vampire|Venenatis|Vet'ion|Vitreous Jelly|Wall beast|Warped Jelly|Waterfiend|Werewolf|Wingman Skree|Yak|Zakl'n Gritch|Zamorak wizard|Zombie (random event)|Zulrah|Zygomite")
+		ini_insertKey(ini, "General", "mobList=Aberrant spectre|Abhorrent spectre|Abyssal Sire|Abyssal demon|Al-Kharid warrior|Ankou|Aviansie|Baby blue dragon|Baby green dragon|Balfrug Kreeyath|Banshee|Barbarian|Basilisk|Bat|Black Knight|Black bear|Black demon|Black dragon|Black unicorn|Bloodveld|Blue dragon|Bree|Brine rat|Bronze dragon|Callisto|Catablepon|Cave abomination|Cave bug|Cave crawler|Cave horror|Cave kraken|Cave slime|Cerberus|Chaos Elemental|Chaos Fanatic|Chaos druid|Chaos dwarf|Chasm Crawler|Choke devil|Chronozon|Cockatrice|Commander Zilyana|Corporeal Beast|Crawling Hand|Crazy archaeologist|Crocodile|Crushing Hand|Cyclops|Dagannoth (Lighthouse)|Dagannoth Prime|Dagannoth Rex|Dagannoth Supreme|Dark beast|Demonic gorilla|Desert Lizard|Deviant spectre|Dust devil|Earth warrior|Elder Chaos druid|Fever spider|Fire giant|Fiyr Shade|Flaming pyrelord|Flesh Crawler|Flight Kilisa|Flockleader Geerin|Gangster|Gargoyle|General Graardor|Ghoul|Giant Mole|Giant bat|Giant rockslug|Glod|Gnome guard|Gorak|Greater Nechryael|Greater abyssal demon|Greater demon|Green dragon|Growler|Guard dog|Harpie Bug Swarm|Hellhound|Hill giant|Hobgoblin|Ice troll grunt|Icefiend|Infernal Mage|Insatiable Bloodveld|Insatiable mutated Bloodveld|Jogre|K'ril Tsutsaroth|Kalphite Queen|King Black Dragon|King Scorpion|King kurask|Knight of Saradomin|Kraken|Kree'arra|Kurask|Lava dragon|Lesser demon|Lizard|Lizardman|Lizardman brute|Magic axe|Malevolent Mage|Mammoth|Marble gargoyle|Minotaur|Mogre|Molanisk|Monkey Guard|Moss giant|Mountain troll|Mutated Bloodveld|Nechryael|Nechryarch|Night beast|Nuclear smoke devil|Ogre|Otherworldly being|Phrin Shade|Pyrefiend|Red dragon|Repugnant spectre|Riyl Shade|Rockslug|Salarin the Twisted|Scorpia|Scorpion|Screaming banshee|Sea Snake Young|Seagull|Sergeant Grimspike|Sergeant Steelwill|Sergeant Strongstack|Skeletal Wyvern|Smoke devil|Spiritual mage|Spiritual ranger|Spiritual warrior|Starlight|Suqah|Terror dog|Thermonuclear smoke devil|Tree spirit|Tstanon Karlak|Turoth|Twisted Banshee|Unicow|Vampire|Venenatis|Vet'ion|Vitreous Jelly|Wall beast|Warped Jelly|Waterfiend|Werewolf|Wingman Skree|Yak|Zakl'n Gritch|Zamorak wizard|Zombie (random event)|Zulrah|Zygomite")
 		ini_insertKey(ini, "General", "lastItemDatabaseUpdate=" . "")
 		ini_insertKey(ini, "General", "lastMobListUpdate=" . "20161031123901")
+		ini_insertKey(ini, "General", "lastDropTableUpdate=" . "20161031142734")
 		
 	ini_insertSection(ini, "Settings")
 		ini_insertKey(ini, "Settings", "autoOpenStats=" . "0")
@@ -69,7 +70,8 @@ writeIni() {
 		ini_insertKey(ini, "Window Positions", "guiSettingsY=" . "")
 	
 	ini_insertSection(ini, "Drop Tables")
-		ini_insertKey(ini, "Drop Tables", "rare drop table=45 x Law rune|45 x Death rune|67 x Nature rune|150 x Steel arrow|42 x Rune arrow|Uncut sapphire|Uncut emerald|Uncut ruby|Uncut diamond|Dragonstone|Runite bar|100 x Silver ore|3,000 x Coins|Chaos talisman|Nature talisman|Loop half of key|Tooth half of key|20 x Adamant javelin|5 x Rune javelin|Rune 2h sword|Rune battleaxe|Rune sq shield|Rune kiteshield|Dragon med helm|Rune spear|Shield left half|Dragon spear")
+		FileRead, dropTables, % A_ScriptDir "\inc\dropTables.txt"
+		ini .= dropTables
 	
 	updateItemDatabase()
 	ini_save(ini)
@@ -91,8 +93,12 @@ updateMobList() {
 				mob := StringBetween(SubStr(A_LoopField, InStr(A_LoopField, "title=")), """", """")
 				StringReplace, mobNoSpaces, mob, % A_Space, _
 				output := urlToVar("http://2007.runescape.wikia.com/wiki/" mobNoSpaces)
-				If InStr(output, "Drops</span>")
-					MobList .= mob "`n"
+				loop, parse, output, `n
+					If InStr(A_LoopField, "Drops</span>") and InStr(A_LoopField, "mw-headline")
+					{
+						MobList .= mob "`n"
+						break
+					}
 			}
 	}
 	Sort, MobList, CU ; c=case insensitive alphabetical u=remove duplicates
@@ -109,9 +115,16 @@ updateMobList() {
 	SplashTextOff
 }
 
+updateMobListDropTables() {
+	loop, parse, % ini_getValue(ini, "General", "mobList"), |
+		updateMobDropTable(A_LoopField)
+	
+	ini_replaceValue(ini, "General", "lastDropTableUpdate", A_Now)
+}
+
 updateMobDropTable(input) {
 	SplashTextOn, 200, 50, % A_ScriptName, Retrieving mob drop table..
-
+	
 	StringReplace, inputUrl, input, % A_Space, _
 
 	output := urlToVar("http://2007.runescape.wikia.com/wiki/" inputUrl)
@@ -195,6 +208,8 @@ updateMobDropTable(input) {
 		output .= A_LoopField "|"
 	output := RTrim(output, "|")
 	
+	If !InStr(ini_getAllKeyNames(ini, "Drop Tables"), input "=" )
+		ini_insertKey(ini, "Drop Tables", input "=")
 	ini_replaceValue(ini, "Drop Tables", input, output)
 	
 	SplashTextOff, 200, 50, % A_ScriptName, Retrieving mob drop table..
@@ -228,6 +243,17 @@ getItemImg(input) {
 }
 
 getItemId(input) {
+	If InStr(input, " (") ; change to input to match json file: remove space in for example Saradomin brew (4)
+	{
+		loop, parse, input
+		{
+			If A_LoopField is integer
+			{
+				StringReplace, input, input, % " (", (, All
+				break
+			}
+		}
+	}
 	for itemId in itemsObj {
 		If (itemsObj[itemId].name = input)
 			return itemsObj[itemId].id
@@ -241,6 +267,18 @@ priceLookup(input) {
 	{
 		quantity := SubStr(input, 1, InStr(input, " x ") - 1)
 		item := SubStr(input, InStr(input, " x ") + 3)
+	}
+	
+	If InStr(input, " (") ; change to input to match json file: remove space in for example Saradomin brew (4)
+	{
+		loop, parse, input
+		{
+			If A_LoopField is integer
+			{
+				StringReplace, input, input, % " (", (, All
+				break
+			}
+		}
 	}
 	for itemId in itemsObj {
 		If (itemsObj[itemId].name = item)
@@ -485,4 +523,5 @@ getItemUnderMouse() {
 	return OutNameNoExt
 }
 
+#IfWinActive, ahk_exe Notepad++.exe
 ~^s::reload
