@@ -19,6 +19,7 @@ return
 #Include, guiStats.ahk
 #Include, guiLog.ahk
 #Include, guiSettings.ahk
+#Include, guiDigitInputBox.ahk
 
 exitRoutine:
 	If WinExist("Drop Logger Stats")
@@ -439,9 +440,6 @@ WM_MOUSEMOVE() {
 }
 
 WM_LBUTTONUP() {
-	gui log: +OwnDialogs
-	CoordMode, Mouse, Screen
-
 	selectedItem := getItemUnderMouse()
 	If !(selectedItem)
 		return
@@ -457,16 +455,15 @@ WM_LBUTTONUP() {
 	selectedItem := getItemQuantity(selectedItem)
 	If InStr(selectedItem, "custom x ")
 	{
-		MouseGetPos, xx, yy
-		xx -= 50
-		yy -= 50
-		InputBox, OutputVar, % A_ScriptName, , , 100, 103, % xx, % yy
-		
-		If !(OutputVar)
+		MouseGetPos, , , WhichWindow, WhichControl
+		ControlGetPos, xCtrl, yCtrl, , , %WhichControl%, ahk_id %WhichWindow%
+		WinGetPos, xWin, yWin, , , ahk_id %WhichWindow%
+		xx := xWin + xCtrl + 1
+		yy := yWin + yCtrl + 1
+		output := guiDigitInputBox(xx, yy)
+		If !(output)
 			return
-		If OutputVar is not integer
-			return
-		StringReplace, selectedItem, selectedItem, custom, % OutputVar
+		StringReplace, selectedItem, selectedItem, custom, % output
 	}
 	
 	If !(existingItems)
