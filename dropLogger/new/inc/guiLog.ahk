@@ -1,5 +1,5 @@
 guiLog(action = "") {
-	static _btnSettings, _btnUndo, _tabs, _btnTrip, _btnNewTrip, _btnLogKill, _logDisplay, _dropsDisplay, killsThisTrip, tripTimerRunning, tripStartTime, tripCount
+	static _btnSettings, _btnUndo, _tabs, _btnTrip, _btnNewTrip, _btnLogKill, _logDisplay, _dropsDisplay, killsThisTrip, tripTimerRunning, tripStartTime, tripCount, now_formatted
 	
 	autoOpenStats := ini_getValue(ini, "Settings", "autoOpenStats")
 	guiLogX := ini_getValue(ini, "Window Positions", "guiLogX")
@@ -19,55 +19,51 @@ guiLog(action = "") {
 		return
 	}
 	
-	If !WinExist("Drop Logger")
+	marginWidth = 0
+	marginHeight = 0
+	iconWidth = 45
+	iconHeight = 45
+	iconRowHeight = 5
+	
+	loop, parse, % ini_getValue(ini, "Drop Tables", "rare drop table"), |
+		rareDropTableCount++
+	loop, parse, % ini_getValue(ini, "Drop Tables", g_mob), |
+		dropTableCount++
+	
+	If (dropTableCount > rareDropTableCount)
+		tabWidth := Ceil(dropTableCount / iconRowHeight) * (iconWidth + marginWidth) + 30
+	else
+		tabWidth := Ceil(rareDropTableCount / iconRowHeight) * (iconWidth + marginWidth) + 30
+	
+	; properties
+	Gui log: New, +LabelguiLog_
+	Gui log: +LastFound
+	Gui log: Margin, 5, 5
+	
+	; controls
+	Gui log: add, button, w150 r2 section hwnd_btnTrip gguiLog_trip
+	Gui log: add, button, x+5 w150 r2 section hwnd_btnNewTrip gguiLog_newTrip, New trip
+	
+	Gui log: add, edit, x5 w305 r20 ReadOnly hwnd_logDisplay
+	
+	Gui log: add, button, x5 w50 r1 hwnd_btnSettings gguiLog_settings, Settings
+	Gui log: add, button, x+5 w50 r1 hwndg__guiLog_btnStats gguiLog_stats, Stats
+	Gui log: add, button, x+5 w95 r1 hwnd_btnUndo gguiLog_undo, Undo
+	Gui log: add, button, x+5 w95 r1 gguiLog_redo hwndg__guiLog_btnRedo Disabled, Redo
+	
+	Gui log: Add, Button, xs+155 ys w%tabWidth% section r2 hwnd_btnLogKill gguiLog_kill, + Kill (enter)
+	
+	Gui log: Add, Tab2, xs w%tabWidth% h268 hwnd_tabs section, Drop Table
+	
+	Gui log: Margin, % marginWidth, % marginHeight
+	
+	Gui log: Tab, Drop Table
+	
+	count := ""
+	If !InStr(ini_getValue(ini, "Drop Tables", g_mob), "|")
+		Gui log: Add, Picture, xp+10 yp+30 w%iconWidth% h%iconHeight% AltSubmit Border section, % A_ScriptDir "\res\img\items\" ini_getValue(ini, "Drop Tables", g_mob) ".gif"
+	else
 	{
-		marginWidth = 0
-		marginHeight = 0
-		iconWidth = 45
-		iconHeight = 45
-		iconRowHeight = 5
-		
-		loop, parse, % ini_getValue(ini, "Drop Tables", "rare drop table"), |
-			rareDropTableCount++
-		loop, parse, % ini_getValue(ini, "Drop Tables", g_mob), |
-			dropTableCount++
-		
-		If (dropTableCount > rareDropTableCount)
-		{
-			; msgbox hi2
-			tabWidth := Ceil(dropTableCount / iconRowHeight) * (iconWidth + marginWidth) + 30
-		}
-		else
-		{
-			; msgbox hi1
-			tabWidth := Ceil(rareDropTableCount / iconRowHeight) * (iconWidth + marginWidth) + 30
-		}
-		
-		; properties
-		Gui log: New, +LabelguiLog_
-		Gui log: +LastFound
-		Gui log: Margin, 5, 5
-		
-		; controls
-		Gui log: add, button, w150 r2 section hwnd_btnTrip gguiLog_trip
-		Gui log: add, button, x+5 w150 r2 section hwnd_btnNewTrip gguiLog_newTrip, New trip
-		
-		Gui log: add, edit, x5 w305 r20 ReadOnly hwnd_logDisplay
-		
-		Gui log: add, button, x5 w50 r1 hwnd_btnSettings gguiLog_settings, Settings
-		Gui log: add, button, x+5 w50 r1 hwndg__guiLog_btnStats gguiLog_stats, Stats
-		Gui log: add, button, x+5 w95 r1 hwnd_btnUndo gguiLog_undo, Undo
-		Gui log: add, button, x+5 w95 r1 gguiLog_redo hwndg__guiLog_btnRedo Disabled, Redo
-		
-		Gui log: Add, Button, xs+155 ys w%tabWidth% section r2 hwnd_btnLogKill gguiLog_kill, + Kill (enter)
-		
-		Gui log: Add, Tab2, xs w%tabWidth% h268 hwnd_tabs section, Drop Table
-		
-		Gui log: Margin, % marginWidth, % marginHeight
-		
-		Gui log: Tab, Drop Table
-		
-		count := ""
 		loop, parse, % ini_getValue(ini, "Drop Tables", g_mob), |
 		{
 			If !(A_Index = 1)
@@ -93,54 +89,54 @@ guiLog(action = "") {
 				}
 			}
 		}
-		
-		count := ""
-		If InStr(ini_getValue(ini, "Drop Tables", g_mob), "rare drop table")
-		{
-			GuiControl,, % _tabs, Rare Drop Table|
-			
-			Gui log: Tab, Rare Drop Table
-			
-			loop, parse, % ini_getValue(ini, "Drop Tables", "rare drop table"), |
-			{
-				LoopField := A_LoopField
-				If InStr(LoopField, " x ")
-					LoopField := SubStr(LoopField, InStr(LoopField, " x ") + 3)
-					
-				If !(count)
-				{
-					count := 1
-
-					ControlGetPos, tab1static1_x, tab1static1_y, , , Static1
-					tab1static1_x -= 3
-					tab1static1_y -= 26
-					Gui log: Add, Picture, x%tab1static1_x% y%tab1static1_y% w%iconWidth% h%iconHeight% AltSubmit Border section, % A_ScriptDir "\res\img\items\rare drop table\" LoopField ".gif"
-				}
-				else If (count = iconRowHeight)
-				{
-					count := 1
-					Gui log: Add, Picture, % "xs" + marginWidth + iconWidth + 1 " ys w" iconWidth " h"iconHeight " AltSubmit Border section", % A_ScriptDir "\res\img\items\rare drop table\" LoopField ".gif"
-				}
-				else
-				{
-					count++
-					Gui log: Add, Picture, % "yp" + marginHeight + iconHeight + 1 " w" iconWidth " h" iconHeight " AltSubmit Border", % A_ScriptDir "\res\img\items\rare drop table\" LoopField ".gif"
-				}
-			}
-		}
-		
-		Gui log: Tab
-		
-		Gui log: Margin, 5, 5
-		
-		Gui log: Add, Edit, % "x315 y320 w" tabWidth - 55 " r1 ReadOnly hwnd_dropsDisplay"
-		Gui log: Add, Button, x+5 yp-1 w50 gguiLog_clearDrops, Clear
-		
-		Gui log: Tab
 	}
 	
+	count := ""
+	If InStr(ini_getValue(ini, "Drop Tables", g_mob), "rare drop table")
+	{
+		GuiControl,, % _tabs, Rare Drop Table|
+		
+		Gui log: Tab, Rare Drop Table
+		
+		loop, parse, % ini_getValue(ini, "Drop Tables", "rare drop table"), |
+		{
+			LoopField := A_LoopField
+			If InStr(LoopField, " x ")
+				LoopField := SubStr(LoopField, InStr(LoopField, " x ") + 3)
+				
+			If !(count)
+			{
+				count := 1
+
+				ControlGetPos, tab1static1_x, tab1static1_y, , , Static1
+				tab1static1_x -= 3
+				tab1static1_y -= 26
+				Gui log: Add, Picture, x%tab1static1_x% y%tab1static1_y% w%iconWidth% h%iconHeight% AltSubmit Border section, % A_ScriptDir "\res\img\items\rare drop table\" LoopField ".gif"
+			}
+			else If (count = iconRowHeight)
+			{
+				count := 1
+				Gui log: Add, Picture, % "xs" + marginWidth + iconWidth + 1 " ys w" iconWidth " h"iconHeight " AltSubmit Border section", % A_ScriptDir "\res\img\items\rare drop table\" LoopField ".gif"
+			}
+			else
+			{
+				count++
+				Gui log: Add, Picture, % "yp" + marginHeight + iconHeight + 1 " w" iconWidth " h" iconHeight " AltSubmit Border", % A_ScriptDir "\res\img\items\rare drop table\" LoopField ".gif"
+			}
+		}
+	}
+	
+	Gui log: Tab
+	
+	Gui log: Margin, 5, 5
+	
+	Gui log: Add, Edit, % "x315 y320 w" tabWidth - 55 " r1 ReadOnly hwnd_dropsDisplay"
+	Gui log: Add, Button, x+5 yp-1 w50 gguiLog_clearDrops, Clear
+	
+	Gui log: Tab
+	
 	; show
-	If (guiLogX) and (guiLogY)
+	If !(guiLogX = "") and !(guiLogY = "")
 		Gui log: show, % "x" guiLogX " y" guiLogY " AutoSize", Drop Logger
 	else
 		Gui log: show, AutoSize, Drop Logger
@@ -151,10 +147,6 @@ guiLog(action = "") {
 	
 	If (autoOpenStats)
 		Gosub guiLog_stats
-	
-	; close
-	DetectHiddenWindows, Off
-	WinWaitClose, % "Drop Logger - " g_logFile
 	return
 	
 	guiLog_trip:
@@ -303,7 +295,8 @@ guiLog(action = "") {
 	return
 	
 	guiLog_close:
-		Gui log: Destroy
+		SetTimer, guiLog_tripTimer, Off
+		tripTimerRunning := 0
 		
 		WinGetPos, guiLogX, guiLogY, , , Drop Logger
 		ini_replaceValue(ini, "Window Positions", "guiLogX", guiLogX)
@@ -312,6 +305,8 @@ guiLog(action = "") {
 		g_logFile := ""
 		g_log := ""
 		g_mob := ""
+		
+		Gui log: Destroy
 		
 		guiMain()
 	return

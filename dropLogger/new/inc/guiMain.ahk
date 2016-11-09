@@ -1,6 +1,9 @@
 guiMain() {
 	static guiMain_searchString
 	
+	guiMainX := ini_getValue(ini, "Window Positions", "guiMainX")
+	guiMainY := ini_getValue(ini, "Window Positions", "guiMainY")
+	
 	; properties
 	gui main: new
 	gui main: margin, 5, 5
@@ -17,12 +20,12 @@ guiMain() {
 	Gosub guiMain_search
 	
 	; show
-	gui main: show, , Choose Mob
+	If !(guiMainX = "") and !(guiMainY = "")
+		Gui main: show, % "x" guiMainX " y" guiMainY " AutoSize NoActivate", Drop Logger Mob Select
+	else
+		Gui main: show, AutoSize NoActivate, Drop Logger Mob Select
 	
 	loadSettings("loadItemsObj")
-	
-	; close
-	WinWaitClose, Choose Mob
 	return
 	
 	guiMain_Lb:
@@ -70,17 +73,18 @@ guiMain() {
 		If !(g_logFile)
 			return
 		
-		gui main: hide
+		gui main: destroy
 		
 		If !(ini_getValue(ini, "Drop Tables", g_mob))
 			updateMobDropTable(g_mob)
-		
+
 		guiLog()
-		
-		gui main: destroy
 	return
 	
 	guiMain_escape:
 	guiMain_close:
+		WinGetPos, guiMainX, guiMainY, , , Drop Logger Mob Select
+		ini_replaceValue(ini, "Window Positions", "guiMainX", guiMainX)
+		ini_replaceValue(ini, "Window Positions", "guiMainY", guiMainY)
 	exitapp
 }

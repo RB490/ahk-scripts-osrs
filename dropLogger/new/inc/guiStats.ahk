@@ -24,7 +24,7 @@ guiStats(refresh = "") {
 	Gosub guiStats_refresh
 	
 	; show
-	If (guiStatsX) and (guiStatsY)
+	If !(guiStatsX = "") and !(guiStatsY = "")
 		Gui stats: show, % "x" guiStatsX " y" guiStatsY " AutoSize NoActivate", Drop Logger Stats
 	else
 		Gui stats: show, AutoSize NoActivate, Drop Logger Stats

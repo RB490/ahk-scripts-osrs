@@ -35,7 +35,7 @@ guiSettings() {
 	Gosub guiSettings_refresh
 	
 	; show
-	If (guiSettingsX) and (guiSettingsY)
+	If !(guiSettingsX = "") and !(guiSettingsY = "")
 		Gui settings: show, % "x" guiSettingsX " y" guiSettingsY " AutoSize", Drop Logger Settings
 	else
 		Gui settings: show, AutoSize, Drop Logger Settings

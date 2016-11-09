@@ -63,6 +63,8 @@ writeIni() {
 		ini_insertKey(ini, "Settings", "autoOpenStats=" . "0")
 	
 	ini_insertSection(ini, "Window Positions")
+		ini_insertKey(ini, "Window Positions", "guiMainX=" . "")
+		ini_insertKey(ini, "Window Positions", "guiMainY=" . "")
 		ini_insertKey(ini, "Window Positions", "guiLogX=" . "")
 		ini_insertKey(ini, "Window Positions", "guiLogY=" . "")
 		ini_insertKey(ini, "Window Positions", "guiStatsX=" . "")

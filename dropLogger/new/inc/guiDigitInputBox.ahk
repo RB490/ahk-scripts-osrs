@@ -8,7 +8,7 @@ guiDigitInputBox(x, y, buttons = "") {
 		
 		; controls
 		gui inputbox: font, s15 verdana
-		gui inputbox: add, edit, y9 w43 h43 r1 -VScroll -E0x200 Center Number
+		gui inputbox: add, edit, y9 w45 h45 r1 -VScroll -E0x200 Center Number
 		gui inputbox: font
 		
 		If (buttons) {
@@ -20,7 +20,7 @@ guiDigitInputBox(x, y, buttons = "") {
 	DetectHiddenWindows, Off
 	
 	; show
-	gui inputbox: show, % " x" x " y" y " w43 h43", Digit Inputbox
+	gui inputbox: show, % " x" x " y" y " w45 h45", Digit Inputbox
 	
 	SetTimer, guiInputbox_hasFocusTimer, 10
 	
