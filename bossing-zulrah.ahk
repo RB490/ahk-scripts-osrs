@@ -4,17 +4,17 @@
 
 #If WinActive("ahk_exe RS.exe") or WinActive("ahk_exe JagexLauncher.exe") or WinActive("ahk_exe OSBuddy.exe")
 
-q::f1
-w::f2
-e::f3
-r::f4
-t::f5
+q::f1	; inventory
+w::f2	; combat options
+e::f3	; prayers
+r::f4	; magic
+t::f5	; equipment
 
-z::f1
-x::f2
-c::f3
-v::f4
-b::f5
+z::f1	; inventory
+x::f2	; combat options
+c::f3	; prayers
+v::f4	; magic
+b::f5	; equipment
 
 ; banking
 {
@@ -36,10 +36,6 @@ b::f5
 	return
 }
 
-f12::
-	suspend
-	SoundBeep
-return
 #If
 
 #IfWinActive, ahk_exe Notepad++
@@ -47,3 +43,7 @@ return
 #IfWinActive
 
 
+f12::
+	suspend
+	SoundBeep
+return

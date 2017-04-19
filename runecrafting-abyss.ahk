@@ -23,7 +23,7 @@
 	return
 	
 	w::
-		MouseMove, 0, 40, 0, R
+		MouseMove, 0, 38, 0, R
 	return
 	
 	e::
