@@ -27,7 +27,7 @@ SetBatchLines -1
 	return
 
 	w::
-		MouseMove, 0, 85, 0, R
+		MouseMove, 0, 40, 0, R
 	return
 
 	e::
@@ -35,30 +35,18 @@ SetBatchLines -1
 	return
 
 	r::
-		MouseMove, 0, -85, 0, R
+		MouseMove, 0, -40, 0, R
+	return
+	
+	LButton::
+		Send {Shift down}
+		click
+		Send {Shift up}
 	return
 #If
 
-/*
-#IfWinActive, ahk_exe AutoHotkey.exe
-d::
-	click right
-	MouseMove, 0, 40, 0, R
-	click
-	MouseMove, 0, -40, 0, R
-return
-
-f::
-	click right
-	MouseMove, 0, 70, 0, R
-	click
-	MouseMove, 0, -70, 0, R
-return
-#IfWinActive, ahk_exe AutoHotkey.exe
-*/
-
 #IfWinActive, ahk_class Notepad++
-~^s::reload
+	~^s::reload
 #IfWinActive
 
 RsActive() {
@@ -71,5 +59,7 @@ RsActive() {
 
 f12::
 	suspend
+	status !=: status
 	SoundBeep
+	tooltip, % status,0,0
 return
