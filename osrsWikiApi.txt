@@ -1,0 +1,131 @@
+http://oldschoolrunescape.wikia.com/api/v1
+
+Get articles list in alphabetical order
+
+	Link
+		http://oldschoolrunescape.wikia.com/api/v1/Articles/List?limit=2
+		
+	Result
+		{
+		  "items": [
+			{
+			  "id": 73301,
+			  "title": "!price",
+			  "url": "/wiki/!price",
+			  "ns": 0
+			},
+			{
+			  "id": 20787,
+			  "title": "\"Perfect\" gold bar",
+			  "url": "/wiki/%22Perfect%22_gold_bar",
+			  "ns": 0
+			}
+		  ],
+		  "basepath": "http://oldschoolrunescape.wikia.com",
+		  "offset": "\"Perfect\" gold ore"
+		}
+		
+Get articles list (in a category) in alphabetical order
+
+	Link
+		http://oldschoolrunescape.wikia.com/api/v1/Articles/List?category=Bestiary&limit=2
+		
+	Result
+		{
+		  "items": [
+			{
+			  "id": 27806,
+			  "title": "A Doubt",
+			  "url": "/wiki/A_Doubt",
+			  "ns": 0
+			},
+			{
+			  "id": 12869,
+			  "title": "Aberrant spectre",
+			  "url": "/wiki/Aberrant_spectre",
+			  "ns": 0
+			}
+		  ],
+		  "basepath": "http://oldschoolrunescape.wikia.com",
+		  "offset": "page|4142484f5252454e542053504543545245|80108"
+		}
+		
+Get simplified article contents
+	
+	Link
+		http://oldschoolrunescape.wikia.com/api/v1/Articles/AsSimpleJson?id=27806
+	
+	Result
+		{
+		  "sections": [
+			{
+			  "title": "A Doubt",
+			  "level": 1,
+			  "content": [
+				{
+				  "type": "paragraph",
+				  "text": "A Doubt is a monster that can be fought during the Dream Mentor quest. Numerous Doubts are summoned during the first battle by The Inadequacy, and represent the protagonist of the quest, Cyrisus, and his little nagging doubts about combat. Though they can be fought and killed with ease, it is recommended that players do not attempt to kill them and instead focus only on the main fight. All spawned Doubts will disappear once The Inadequacy is killed. Players can, however, take advantage of the Doubts by using blood spells on them to heal hitpoints."
+				}
+			  ],
+			  "images": []
+			},
+			{
+			  "title": "Strategy",
+			  "level": 2,
+			  "content": [
+				{
+				  "type": "paragraph",
+				  "text": "Players should remember to turn auto-retaliate off whilst fighting The Inadequacy. Otherwise, players may start fighting the Doubts that are also attacking them. The Inadequacy has a higher max hit making a Doubt undesirable to attack. It's best to leave a Doubt seeing as they're highly inaccurate and do not hit very high."
+				}
+			  ],
+			  "images": []
+			},
+			{
+			  "title": "Habitat",
+			  "level": 2,
+			  "content": [
+				{
+				  "type": "list",
+				  "elements": [
+					{
+					  "text": "Dream World",
+					  "elements": []
+					}
+				  ]
+				}
+			  ],
+			  "images": []
+			}
+		  ]
+		}
+		
+Get details about one or more articles
+
+	Link
+		http://oldschoolrunescape.wikia.com/api/v1/Articles/Details?ids=27806&abstract=9999&width=200&height=200
+		
+	Result
+		{
+		  "items": {
+			"27806": {
+			  "id": 27806,
+			  "title": "A Doubt",
+			  "ns": 0,
+			  "url": "/wiki/A_Doubt",
+			  "revision": {
+				"id": 5843342,
+				"user": "Spineweilder",
+				"user_id": 1759647,
+				"timestamp": "1519267786"
+			  },
+			  "type": "article",
+			  "abstract": "A Doubt is a monster that can be fought during the Dream Mentor quest. Numerous Doubts are summoned during the first battle by The Inadequacy, and represent the protagonist of the quest, Cyrisus, and his little nagging doubts about combat. Though they can be fought and killed with ease, it is recommended that players do not attempt to kill them and instead focus only on the main fight. All spawned Doubts will disappear once The Inadequacy is killed. Players can, however, take advantage of...",
+			  "thumbnail": "https://vignette.wikia.nocookie.net/2007scape/images/f/fb/A_Doubt.png/revision/latest/window-crop/width/200/x-offset/0/y-offset/0/window-width/456/window-height/456?cb=20151201042219",
+			  "original_dimensions": {
+				"width": 456,
+				"height": 512
+			  }
+			}
+		  },
+		  "basepath": "http://oldschoolrunescape.wikia.com"
+		}

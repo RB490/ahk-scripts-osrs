@@ -144,7 +144,7 @@ WM_LBUTTONDBLCLK() {
 }
 
 
-#IfWinActive ahk_exe OSBuddy.exe
+#If RsActive()
 	j::
 		click right
 	return
@@ -155,7 +155,7 @@ WM_LBUTTONDBLCLK() {
 		click
 	return
 
-#IfWinActive
+#If
 
 ~f12::
 	suspend

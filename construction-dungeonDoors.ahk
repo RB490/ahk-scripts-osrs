@@ -5,7 +5,7 @@ SetKeyDelay -1
 
 return
 
-#IfWinActive ahk_exe RS.exe
+#If RsActive()
 	
 	; build door
 	{

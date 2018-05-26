@@ -2,7 +2,7 @@
 #SingleInstance, force
 
 
-#If WinActive("ahk_exe RS.exe") or WinActive("ahk_exe JagexLauncher.exe") or WinActive("ahk_exe OSBuddy.exe")
+#If RsActive()
 
 q::f1	; inventory
 w::f2	; combat options
@@ -43,7 +43,7 @@ b::f5	; equipment
 #IfWinActive
 
 
-f12::
+~f12::
 	suspend
 	SoundBeep
 return

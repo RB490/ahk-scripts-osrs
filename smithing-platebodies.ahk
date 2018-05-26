@@ -3,13 +3,13 @@
 SetBatchLines -1
 
 #If RsActive()
-;; men
+;; withdraw all
 	a::
 		click right
 	return
 
 	s::
-		MouseMove, 0, 70, 0, R
+		MouseMove, 0, 100, 0, R
 	return
 
 	d::
@@ -17,17 +17,17 @@ SetBatchLines -1
 	return
 
 	f::
-		MouseMove, 0, -70, 0, R
+		MouseMove, 0, -100, 0, R
 	return
 	
-;; ham
+;; withdraw custom
 
 	q::
 		click right
 	return
 
 	w::
-		MouseMove, 0, 40, 0, R
+		MouseMove, 0, 80, 0, R
 	return
 
 	e::
@@ -35,8 +35,12 @@ SetBatchLines -1
 	return
 
 	r::
-		MouseMove, 0, -40, 0, R
+		MouseMove, 0, -80, 0, R
 	return
+	
+;; hotkeys
+g::escape
+
 #If
 
 #IfWinActive, ahk_class Notepad++

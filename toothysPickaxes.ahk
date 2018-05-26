@@ -9,7 +9,7 @@ SetBatchLines -1
 	return
 
 	s::
-		MouseMove, 0, 55, 0, R
+		MouseMove, 0, 90, 0, R
 	return
 
 	d::
@@ -17,7 +17,7 @@ SetBatchLines -1
 	return
 
 	f::
-		MouseMove, 0, -55, 0, R
+		MouseMove, 0, -90, 0, R
 	return
 	
 ;; ham
@@ -38,28 +38,14 @@ SetBatchLines -1
 		MouseMove, 0, -40, 0, R
 	return
 	
-	LButton::
-		Send {Shift down}
-		click
-		Send {Shift up}
-	return
+g::escape
 #If
 
 #IfWinActive, ahk_class Notepad++
-	~^s::reload
+~^s::reload
 #IfWinActive
-
-RsActive() {
-	WinGet, WIN, ProcessName, A
-	If InStr(WIN, "JagexLauncher.exe") or InStr(WIN, "OSBuddy.exe")
-		return true
-	else
-		return false
-}
 
 ~f12::
 	suspend
-	status !=: status
 	SoundBeep
-	tooltip, % status,0,0
 return

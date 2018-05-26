@@ -6,7 +6,7 @@ SetKeyDelay -1
 
 return
 
-#IfWinActive ahk_exe OSBuddy.exe
+#If RsActive()
 	
 	{
 		q::
@@ -91,7 +91,7 @@ return
 		click
 	return
 	
-#IfWinActive
+#If
 
 ~f12::
 	suspend
