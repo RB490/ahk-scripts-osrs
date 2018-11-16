@@ -7,12 +7,15 @@ SetKeyDelay -1
 	xbutton1::
 	Send {shift down}
 	
+	verticalPixels := 36
+	verticalRows := 7
+	
 	loop, 4 {
-		loop, 6 {
+		loop, % verticalRows {
 			click
-			MouseMove, 0, 36, 0, R
+			MouseMove, 0, % verticalPixels, 0, R
 		}
-		MouseMove, 40, -216, 0, R
+		MouseMove, 40, -verticalPixels * verticalRows, 0, R
 	}
 	
 	Send {shift up}

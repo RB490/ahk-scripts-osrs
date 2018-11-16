@@ -10,6 +10,7 @@
 	
 	f::
 		send {escape}
+		send {f1}
 	return
 	
 	g::f4 ; magic tab
