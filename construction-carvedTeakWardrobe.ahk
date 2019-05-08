@@ -1,4 +1,4 @@
-﻿#Persistent
+#Persistent
 #SingleInstance, force
 SetBatchLines -1
 SetKeyDelay -1
@@ -11,8 +11,6 @@ return
 	{
 		q::
 			click right
-			
-			; Gosub RefreshStats
 		return
 		
 		w::
@@ -23,7 +21,11 @@ return
 			click
 		return
 		
-		r::2
+		r::
+			MouseMove, 0, -50, 0, R
+		return
+		
+		t::4
 	}
 	
 	; remove
@@ -41,7 +43,11 @@ return
 			click
 		return
 		
-		f::1
+		f::
+			MouseMove, 0, -70, 0, R
+		return
+		
+		g::1
 	}
 	
 	; butler
@@ -51,7 +57,7 @@ return
 		x::space
 	
 	}
-#IfWinActive
+#If
 
 ~f12::
 	suspend
