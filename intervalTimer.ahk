@@ -5,9 +5,9 @@ global g_interval := 13 ; interval time in seconds
 global g_timerRunning := true ; interval time in seconds
 global g_startTime ; timer start time
 
-; InputBox, g_interval, Interval timer, Choose interval time in seconds`n`n13 For broad arrows
-; If !(g_interval)
-	; exitapp
+InputBox, g_interval, Interval timer, Choose interval time in seconds`n`n13 For broad arrows
+If !(g_interval)
+	exitapp
 	
 SetTimer, intervalTimer, On
 return
