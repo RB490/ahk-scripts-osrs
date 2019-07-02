@@ -4,6 +4,7 @@
 ; SetMouseDelay -1
 
 #If RsActive()
+RButton::
 f::
 	Send +{Click}
 	; Send {shift down}
@@ -16,7 +17,7 @@ return
 ~^s::reload
 #IfWinActive
 
-~f12::
+f12::
 	suspend
 	SoundBeep
 return
