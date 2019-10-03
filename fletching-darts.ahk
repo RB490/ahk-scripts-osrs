@@ -10,7 +10,7 @@ SetKeyDelay -1
 
 return
 
-#If RsActive()
+#If WinClassActive("SunAwtFrame")
 	
 	; darts
 	{
@@ -49,7 +49,7 @@ return
 			click
 		return
 	}
-#IfWinActive
+#If
 
 ~f12::
 	suspend
