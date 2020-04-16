@@ -2,7 +2,7 @@
 #SingleInstance, force
 SetBatchLines -1
 
-#If RsActive()
+#If WinClassActive("ahk_class SunAwtFrame")
 ;; men
 	a::
 		click right
@@ -45,11 +45,11 @@ SetBatchLines -1
 	return
 #If
 
-#IfWinActive, ahk_class Notepad++
+#IfWinActive, ahk_exe Code.exe
 	~^s::reload
 #IfWinActive
 
-RsActive() {
+WinClassActive("ahk_class SunAwtFrame") {
 	WinGet, WIN, ProcessName, A
 	If InStr(WIN, "JagexLauncher.exe") or InStr(WIN, "OSBuddy.exe")
 		return true

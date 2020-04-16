@@ -144,7 +144,7 @@ WM_LBUTTONDBLCLK() {
 }
 
 
-#If RsActive()
+#If WinClassActive("ahk_class SunAwtFrame")
 	j::
 		click right
 	return
@@ -162,5 +162,5 @@ WM_LBUTTONDBLCLK() {
 	SoundBeep
 return
 
-#IfWinActive, ahk_class Notepad++
+#IfWinActive, ahk_exe Code.exe
 ~^s::reload

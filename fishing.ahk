@@ -3,7 +3,7 @@
 SetBatchLines -1
 SetKeyDelay -1
 
-#If RsActive()
+#If WinClassActive("ahk_class SunAwtFrame")
 	xbutton1::
 	Send {shift down}
 	
@@ -22,7 +22,7 @@ SetKeyDelay -1
 	return
 #If
 
-#IfWinActive, ahk_class Notepad++
+#IfWinActive, ahk_exe Code.exe
 ~^s::reload
 #IfWinActive
 

@@ -56,6 +56,6 @@ return
 	SoundBeep
 return
 
-#IfWinActive, ahk_class Notepad++
+#IfWinActive, ahk_exe Code.exe
 ~^s::reload
 #IfWinActive

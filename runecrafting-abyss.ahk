@@ -2,7 +2,7 @@
 #SingleInstance, force
 
 
-#If RsActive()
+#If WinClassActive("ahk_class SunAwtFrame")
 
 ; misc
 {
@@ -63,7 +63,7 @@
 
 #If
 
-#IfWinActive, ahk_exe Notepad++
+#IfWinActive, ahk_exe Code.exe
 ~^s::reload
 #IfWinActive
 

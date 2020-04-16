@@ -2,7 +2,7 @@
 #SingleInstance, force
 
 
-#If RsActive()
+#If WinClassActive("ahk_class SunAwtFrame")
 
 
 f1::send {2 down}

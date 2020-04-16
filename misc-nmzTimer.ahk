@@ -183,5 +183,5 @@ guiDisplay(input1, input2) {
 }
 
 ~f1::reload
-#IfWinActive, ahk_class Notepad++
+#IfWinActive, ahk_exe Code.exe
 ; ~^s::reload

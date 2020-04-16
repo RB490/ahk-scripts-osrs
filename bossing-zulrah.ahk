@@ -2,7 +2,7 @@
 #SingleInstance, force
 
 
-#If RsActive()
+#If WinClassActive("ahk_class SunAwtFrame")
 
 q::f1	; inventory
 w::f2	; combat options

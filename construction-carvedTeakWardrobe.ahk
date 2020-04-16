@@ -5,7 +5,7 @@ SetKeyDelay -1
 
 return
 
-#If RsActive()
+#If WinClassActive("ahk_class SunAwtFrame")
 	
 	; build
 	{
@@ -64,6 +64,6 @@ return
 	SoundBeep
 return
 
-#IfWinActive, ahk_class Notepad++
+#IfWinActive, ahk_exe Code.exe
 ~^s::reload
 #IfWinActive

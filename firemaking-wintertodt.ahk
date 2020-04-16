@@ -83,6 +83,6 @@ WM_LBUTTONDOWN() {
 }
 
 
-#IFWinActive, ahk_exe notepad++.exe
+#IfWinActive, ahk_exe Code.exe
 ~^s::reload
 #IfWinActive

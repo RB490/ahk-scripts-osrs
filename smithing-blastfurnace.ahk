@@ -2,7 +2,7 @@
 #SingleInstance, force
 SetBatchLines -1
 
-#If RsActive()
+#If WinClassActive("ahk_class SunAwtFrame")
 ;; withdraw all
 	a::
 		click right
@@ -43,7 +43,7 @@ g::escape
 
 #If
 
-#IfWinActive, ahk_class Notepad++
+#IfWinActive, ahk_exe Code.exe
 ~^s::reload
 #IfWinActive
 
