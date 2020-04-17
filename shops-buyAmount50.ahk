@@ -4,7 +4,7 @@
 
 #If WinClassActive("ahk_class SunAwtFrame")
 
-; 50 arrows
+; buy 50
 {
 	a::
 		click right
