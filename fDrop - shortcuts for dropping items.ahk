@@ -4,7 +4,9 @@
 ; SetMouseDelay -1
 
 #If WinClassActive("ahk_class SunAwtFrame")
-RButton::
+LButton::
+WheelLeft::
+WheelRight::
 f::
 	Send +{Click}
 	; Send {shift down}
