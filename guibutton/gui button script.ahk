@@ -10,7 +10,7 @@
     }
 
 ; global vars
-    global mainGui := new class_mainGuiClass("Timi")
+    global mainGui := new class_mainGuiClass("gui button script")
     global g_debug := false
 
 ; autoexec
